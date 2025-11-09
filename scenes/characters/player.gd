@@ -7,7 +7,7 @@ enum ControlScheme {CPU, P1, P2}
 enum State {MOVING, TACKLING, RECOVERING}
 
 @export var control_scheme : ControlScheme
-@export var speed: float  = 200.0
+@export var speed: float  = 80.0
 
 @onready var animation_player: AnimationPlayer = %AnimationPlayer
 @onready var player_sprite : Sprite2D = %PlayerSprite

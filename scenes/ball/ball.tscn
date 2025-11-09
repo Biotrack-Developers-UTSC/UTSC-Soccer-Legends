@@ -70,6 +70,8 @@ radius = 4.0
 [node name="Ball" type="AnimatableBody2D"]
 collision_layer = 4
 script = ExtResource("1_stoaj")
+dribble_frecuency = 10.0
+dribble_intensity = 3.0
 
 [node name="BallSprite" type="Sprite2D" parent="."]
 texture = ExtResource("1_nv6q1")
@@ -78,6 +80,7 @@ offset = Vector2(-5, -10)
 hframes = 4
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+unique_name_in_owner = true
 libraries = {
 &"": SubResource("AnimationLibrary_a81tc")
 }
