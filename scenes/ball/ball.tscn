@@ -4,10 +4,8 @@
 [ext_resource type="Script" uid="uid://fg13wufsd0wb" path="res://scenes/ball/ball.gd" id="1_stoaj"]
 [ext_resource type="Texture2D" uid="uid://dtna21b48ab57" path="res://assets/art/props/ball-shadow.png" id="2_stoaj"]
 
-[sub_resource type="Animation" id="Animation_xotqv"]
-resource_name = "idle"
-length = 0.1
-loop_mode = 1
+[sub_resource type="Animation" id="Animation_jbgth"]
+length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -21,8 +19,10 @@ tracks/0/keys = {
 "values": [0]
 }
 
-[sub_resource type="Animation" id="Animation_jbgth"]
-length = 0.001
+[sub_resource type="Animation" id="Animation_xotqv"]
+resource_name = "idle"
+length = 0.1
+loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -69,11 +69,11 @@ radius = 4.0
 
 [node name="Ball" type="AnimatableBody2D"]
 collision_layer = 4
+sync_to_physics = false
 script = ExtResource("1_stoaj")
-dribble_frecuency = 10.0
-dribble_intensity = 3.0
 
 [node name="BallSprite" type="Sprite2D" parent="."]
+unique_name_in_owner = true
 texture = ExtResource("1_nv6q1")
 centered = false
 offset = Vector2(-5, -10)
