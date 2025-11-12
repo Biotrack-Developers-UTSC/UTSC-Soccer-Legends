@@ -6,7 +6,7 @@ func _enter_tree() -> void:
 
 func on_player_enter(body: Player) -> void:
 	ball.carrier = body
-	ball.control_ball()
+	ball.carrier.control_ball()
 	state_transition_requested.emit(Ball.State.CARRIED)
 
 func _process(delta: float) -> void:
