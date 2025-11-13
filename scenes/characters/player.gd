@@ -10,6 +10,7 @@ const CONTROL_SCHEME_MAP : Dictionary = {
 }
 const GRAVITY := 8.0
 const COUNTRIES := ["DEFAULT", "FRANCE", "ARGENTINA", "BRAZIL", "ENGLAND", "GERMANY", "ITALY", "SPAIN", "USA"]
+const WALK_ANIM_THRESHOLD := 0.6
 
 enum ControlScheme {CPU, P1, P2}
 enum Role {GOALIE, DEFENSE, MIDFIELD, OFFENSE}
@@ -38,11 +39,16 @@ var full_name := ""
 var role := Player.Role.MIDFIELD
 var skin_color := Player.SkinColor.MEDIUM
 var country := ""
+var ai_behavior : AIBehavior = AIBehavior.new()
+var spawn_position := Vector2.ZERO
+var weight_on_duty_steering := 0.0
 
 func _ready() -> void:
 	set_control_texture()
 	switch_state(State.MOVING)
 	set_shader_properties()
+	setup_ai_behavior()
+	spawn_position = position
 
 func _process(delta: float) -> void:
 	flip_sprites()
@@ -67,16 +73,19 @@ func switch_state(state: State, state_data: PlayerStateData = PlayerStateData.ne
 	if current_state != null:
 		current_state.queue_free()
 	current_state = state_factory.get_fresh_state(state)
-	current_state.setup(self, state_data, animation_player, ball, teammate_detection_area,  ball_detection_area, own_goal, target_goal)
+	current_state.setup(self, state_data, animation_player, ball, teammate_detection_area,  ball_detection_area, own_goal, target_goal, ai_behavior)
 	current_state.state_transition_requested.connect(switch_state.bind())
 	current_state.name = "PlayerStateMachine: " + str(state)
 	call_deferred("add_child", current_state)
 
 func set_movement_animation() -> void:
-	if velocity.length() > 0:
-		animation_player.play("run")
-	else:
+	var vel_lenght := velocity.length()
+	if vel_lenght < 1:
 		animation_player.play("idle")
+	elif vel_lenght < speed * WALK_ANIM_THRESHOLD:
+		animation_player.play("walk")
+	else:
+		animation_player.play("run")
 
 func process_gravity(delta: float) -> void:
 	if velocity.length() > 0:
@@ -121,3 +130,8 @@ func set_shader_properties() -> void:
 	var country_color := COUNTRIES.find(country)
 	country_color = clamp(country_color, 0, COUNTRIES.size() - 1)
 	player_sprite.material.set_shader_parameter("team_color", country_color)
+
+func setup_ai_behavior() -> void:
+	ai_behavior.setup(self, ball)
+	ai_behavior.name = "AI Behavior"
+	add_child(ai_behavior)
