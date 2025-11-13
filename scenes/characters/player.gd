@@ -9,6 +9,7 @@ const CONTROL_SCHEME_MAP : Dictionary = {
 	ControlScheme.P2: preload("res://assets/art/props/2p.png"),
 }
 const GRAVITY := 8.0
+const COUNTRIES := ["DEFAULT", "FRANCE", "ARGENTINA", "BRAZIL", "ENGLAND", "GERMANY", "ITALY", "SPAIN", "USA"]
 
 enum ControlScheme {CPU, P1, P2}
 enum Role {GOALIE, DEFENSE, MIDFIELD, OFFENSE}
@@ -36,10 +37,12 @@ var state_factory := PlayerStateFactory.new()
 var full_name := ""
 var role := Player.Role.MIDFIELD
 var skin_color := Player.SkinColor.MEDIUM
+var country := ""
 
 func _ready() -> void:
 	set_control_texture()
 	switch_state(State.MOVING)
+	set_shader_properties()
 
 func _process(delta: float) -> void:
 	flip_sprites()
@@ -47,7 +50,7 @@ func _process(delta: float) -> void:
 	process_gravity(delta)
 	move_and_slide()  # <- ¡Esto hace que realmente se mueva!
 
-func initialize(context_position: Vector2, context_ball: Ball, context_own_goal: Goal, context_target_goal: Goal, context_player_data: PlayerResource) -> void:
+func initialize(context_position: Vector2, context_ball: Ball, context_own_goal: Goal, context_target_goal: Goal, context_player_data: PlayerResource, context_country: String) -> void:
 	position = context_position
 	ball = context_ball
 	own_goal = context_own_goal
@@ -58,6 +61,7 @@ func initialize(context_position: Vector2, context_ball: Ball, context_own_goal:
 	skin_color = context_player_data.skin_color
 	full_name = context_player_data.full_name
 	heading = Vector2.LEFT if target_goal.position.x < position.x else Vector2.RIGHT
+	country = context_country
 
 func switch_state(state: State, state_data: PlayerStateData = PlayerStateData.new()) -> void:
 	if current_state != null:
@@ -110,3 +114,10 @@ func on_animation_complete() -> void:
 func control_ball() -> void:
 	if ball.height > BALL_CONTACT_HEIGHT_MAX:
 		switch_state(Player.State.CHEST_CONTROL)
+
+#colores de equipo por tono de piel
+func set_shader_properties() -> void:
+	player_sprite.material.set_shader_parameter("skin_color", skin_color)
+	var country_color := COUNTRIES.find(country)
+	country_color = clamp(country_color, 0, COUNTRIES.size() - 1)
+	player_sprite.material.set_shader_parameter("team_color", country_color)
