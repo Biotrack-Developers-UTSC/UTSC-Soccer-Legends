@@ -3,6 +3,7 @@ extends AnimatableBody2D
 
 const BOUNCINESS := 0.8 
 const DISTANCE_HIGH_PASS := 130
+const TUMBLE_HEIGHT_VELOCITY := 3.0
 enum State {CARRIED, FREEFORM, SHOT}
 
 @export var friction_air : float
@@ -18,6 +19,7 @@ var state_factory := BallStateFactory.new()
 var velocity := Vector2.ZERO
 var height := 0.0
 var height_velocity := 0.0
+#var tumble_velocity := 0.0
 
 func _ready() -> void:
 	switch_state(State.FREEFORM)
@@ -57,3 +59,9 @@ func can_air_interact() -> bool:
 
 func can_air_connect(air_connect_min_height : float, air_connect_max_height : float) -> bool:
 	return height >= air_connect_min_height and height <= air_connect_max_height
+
+func tumble(tumble_velocity: Vector2) -> void:
+	velocity = tumble_velocity
+	carrier = null
+	height_velocity = TUMBLE_HEIGHT_VELOCITY
+	switch_state(Ball.State.FREEFORM)
