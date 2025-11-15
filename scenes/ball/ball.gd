@@ -12,6 +12,7 @@ enum State {CARRIED, FREEFORM, SHOT}
 @onready var player_detection_area : Area2D = %PlayerDetectionArea
 @onready var ball_sprite : Sprite2D = %BallSprite
 @onready var animation_player : AnimationPlayer = %AnimationPlayer
+@onready var scoring_raycast : RayCast2D = %ScoringRaycast
 
 var carrier : Player = null
 var current_state : BallState = null
@@ -26,6 +27,7 @@ func _ready() -> void:
 
 func _process(_delta: float) -> void:
 	ball_sprite.position = Vector2.UP * height
+	scoring_raycast.rotation = velocity.angle()
 
 func switch_state(state: Ball.State) -> void:
 	if current_state != null:
@@ -65,3 +67,8 @@ func tumble(tumble_velocity: Vector2) -> void:
 	carrier = null
 	height_velocity = TUMBLE_HEIGHT_VELOCITY
 	switch_state(Ball.State.FREEFORM)
+
+func is_headed_towards_scoring_area(scoring_area : Area2D) -> bool:
+	if not scoring_raycast.is_colliding():
+		return false
+	return scoring_raycast.get_collider() == scoring_area
