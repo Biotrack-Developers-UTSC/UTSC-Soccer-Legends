@@ -1,6 +1,8 @@
 class_name Player
 extends CharacterBody2D
 
+signal  swap_requested(player: Player)
+
 const BALL_CONTACT_HEIGHT_MAX := 10.0
 const DURATION_TACKLE := 200
 const CONTROL_SCHEME_MAP : Dictionary = { 
@@ -162,3 +164,7 @@ func get_hurt(hurt_origin: Vector2) -> void:
 
 func can_carry_ball() -> bool:
 	return current_state != null and current_state.can_carry_ball()
+
+func get_pass_request (player: Player) -> void:
+	if ball.carrier == self and current_state != null and current_state.can_pass():
+		switch_state(Player.State.PASSING, PlayerStateData.build().set_pass_target(player))
