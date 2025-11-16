@@ -3,7 +3,7 @@ extends PlayerState
 
 func _enter_tree() -> void:
 	animation_player.play("mourn")
-	player.velocity = Vector2.ZERO 
+	player.velocity = Vector2.ZERO
 	GameEvents.team_reset.connect(on_team_reset.bind())
 
 func on_team_reset() -> void:

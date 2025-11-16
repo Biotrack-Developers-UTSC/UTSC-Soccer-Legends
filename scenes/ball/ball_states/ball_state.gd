@@ -3,7 +3,7 @@ extends Node
 
 const GRAVITY := 10.0
 
-signal state_transition_requested(new_state: Ball.State)
+signal state_transition_requested(new_state: BallState)
 
 var animation_player : AnimationPlayer = null
 var ball : Ball = null
@@ -19,6 +19,9 @@ func setup(context_ball: Ball, context_state_data: BallStateData, context_player
 	animation_player = context_animation_player
 	sprite = context_sprite
 	state_data = context_state_data
+
+func transition_state(new_state: Ball.State, data: BallStateData = BallStateData.new()) -> void:
+	state_transition_requested.emit(new_state, data)
 
 func set_ball_animation_from_velocity() -> void:
 	if ball.velocity == Vector2.ZERO:
@@ -39,15 +42,12 @@ func process_gravity(delta: float, bounciness: float = 0.0) -> void:
 			if bounciness > 0 and ball.height_velocity < 0:
 				ball.height_velocity = -ball.height_velocity * bounciness
 				ball.velocity *= bounciness
-				
+
 func move_and_bounce(delta: float) -> void:
 	var collision := ball.move_and_collide(ball.velocity * delta)
 	if collision != null:
 		ball.velocity = ball.velocity.bounce(collision.get_normal()) * ball.BOUNCINESS
-		ball.switch_state(ball.State.FREEFORM)
+		ball.switch_state(Ball.State.FREEFORM)
 
 func can_air_interact() -> bool:
 	return false
-
-func transition_state(new_state: Ball.State, data: BallStateData = BallStateData.new()) -> void:
-	state_transition_requested.emit(new_state, data)

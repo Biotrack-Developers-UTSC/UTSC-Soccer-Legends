@@ -3,7 +3,7 @@ extends PlayerState
 
 const DURATION_CONTROL := 500
 
-var time_since_control = Time.get_ticks_msec()
+var time_since_control := Time.get_ticks_msec()
 
 func _enter_tree() -> void:
 	animation_player.play("chest_control")
@@ -12,7 +12,7 @@ func _enter_tree() -> void:
 
 func _process(_delta: float) -> void:
 	if Time.get_ticks_msec() - time_since_control > DURATION_CONTROL:
-		transition_state(Player.State.MOVING) 
-
+		transition_state(Player.State.MOVING)
+	
 func can_pass() -> bool:
 	return true

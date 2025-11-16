@@ -1,12 +1,12 @@
 class_name AIBehaviorField
 extends AIBehavior
 
-const SPREAD_ASSIST_FACTOR := 0.8
+const PASS_PROBABILITY := 0.05
 const SHOT_DISTANCE := 150
 const SHOT_PROBABILITY := 0.3
+const SPREAD_ASSIST_FACTOR := 0.8
 const TACKLE_DISTANCE := 15
 const TACKLE_PROBABILITY := 0.3
-const PASS_PROBABILITY := 0.05
 
 func perform_ai_movement() -> void:
 	var total_steering_force := Vector2.ZERO
@@ -17,21 +17,23 @@ func perform_ai_movement() -> void:
 	else:
 		total_steering_force += get_onduty_steering_force()
 		if total_steering_force.length_squared() < 1:
-			total_steering_force += get_spawn_steering_force()
-		elif ball.carrier == null:
-			total_steering_force += get_ball_proximity_steering_force()
+			if is_ball_possessed_by_opponent():
+				total_steering_force += get_spawn_steering_force()
+			elif ball.carrier == null:
+				total_steering_force += get_ball_proximity_steering_force()
+		
 	total_steering_force = total_steering_force.limit_length(1.0)
 	player.velocity = total_steering_force * player.speed
 
 func perform_ai_decisions() -> void:
-	if is_ball_carried_by_opponent() and player.position.distance_to(ball.position) < TACKLE_DISTANCE and randf() < TACKLE_PROBABILITY:
+	if is_ball_possessed_by_opponent() and player.position.distance_to(ball.position) < TACKLE_DISTANCE and randf() < TACKLE_PROBABILITY:
 		player.switch_state(Player.State.TACKLING)
 	if ball.carrier == player:
 		var target := player.target_goal.get_center_target_position()
 		if player.position.distance_to(target) < SHOT_DISTANCE and randf() < SHOT_PROBABILITY:
 			player.face_towards_target_goal()
 			var shot_direction := player.position.direction_to(player.target_goal.get_random_target_position())
-			var data = PlayerStateData.build().set_shot_power(player.power).set_shot_direction(shot_direction)
+			var data := PlayerStateData.build().set_shot_power(player.power).set_shot_direction(shot_direction)
 			player.switch_state(Player.State.SHOOTING, data)
 		elif randf() < PASS_PROBABILITY and has_opponents_nearby() and has_teammate_in_view():
 			player.switch_state(Player.State.PASSING)
@@ -64,4 +66,4 @@ func get_spawn_steering_force() -> Vector2:
 
 func has_teammate_in_view() -> bool:
 	var players_in_view := teammate_detection_area.get_overlapping_bodies()
-	return players_in_view.find_custom(func(p: Player): return p != player and p.country == player.country)
+	return players_in_view.find_custom(func(p: Player): return p != player and p.country == player.country) > -1

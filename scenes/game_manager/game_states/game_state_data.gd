@@ -1,5 +1,4 @@
 class_name GameStateData
-extends Node
 
 var country_scored_on : String
 

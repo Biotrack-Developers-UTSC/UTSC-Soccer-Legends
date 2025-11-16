@@ -4,7 +4,7 @@ extends Node
 signal state_transition_requested(new_state: GameManager.State, data: GameStateData)
 
 var manager : GameManager = null
-var state_data: GameStateData = null
+var state_data : GameStateData = null
 
 func setup(context_manager: GameManager, context_data: GameStateData) -> void:
 	manager = context_manager

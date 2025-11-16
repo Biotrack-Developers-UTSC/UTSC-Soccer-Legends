@@ -1,7 +1,7 @@
 class_name AIBehaviorGoalie
 extends AIBehavior
 
-var PROXIMITY_CONCERN := 10.0
+const PROXIMITY_CONCERN := 10.0
 
 func perform_ai_movement() -> void:
 	var total_steering_force := get_goalie_steering_force()
@@ -9,8 +9,9 @@ func perform_ai_movement() -> void:
 	player.velocity = total_steering_force * player.speed
 
 func perform_ai_decisions() -> void:
-	if ball.is_headed_towards_scoring_area(player.own_goal.get_scoring_area()):
+	if ball.is_headed_for_scoring_area(player.own_goal.get_scoring_area()):
 		player.switch_state(Player.State.DIVING)
+	
 
 func get_goalie_steering_force() -> Vector2:
 	var top := player.own_goal.get_top_target_position()
