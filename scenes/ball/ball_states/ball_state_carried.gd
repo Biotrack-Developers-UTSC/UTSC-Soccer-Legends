@@ -9,7 +9,7 @@ var dribble_time := 0.0
 
 func _enter_tree() -> void:
 	assert(carrier != null)
-	GameEvents.ball_possesed.emit(carrier.fullname)
+	GameEvents.ball_possessed.emit(carrier.fullname)
 
 func _process(delta: float) -> void:
 	var vx := 0.0
