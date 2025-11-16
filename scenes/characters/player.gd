@@ -17,7 +17,7 @@ const WALK_ANIM_THRESHOLD := 0.6
 enum ControlScheme {CPU, P1, P2}
 enum Role {GOALIE, DEFENSE, MIDFIELD, OFFENSE}
 enum SkinColor {LIGHT, MEDIUM, DARK}
-enum State {MOVING, TACKLING, RECOVERING, PREPPING_SHOT, SHOOTING, PASSING, HEADER, VOLLEY_KICK, BICYCLE_KICK, CHEST_CONTROL, HURT, DIVING, CELEBRATING, MOURNING}
+enum State {MOVING, TACKLING, RECOVERING, PREPPING_SHOT, SHOOTING, PASSING, HEADER, VOLLEY_KICK, BICYCLE_KICK, CHEST_CONTROL, HURT, DIVING, CELEBRATING, MOURNING, RESETTING}
 
 @export var ball : Ball
 @export var control_scheme : ControlScheme
@@ -49,6 +49,7 @@ var spawn_position := Vector2.ZERO
 var weight_on_duty_steering := 0.0
 var current_ai_behavior: AIBehavior = null
 var ai_behavior_factory := AIBehaviorFactory.new()
+var kickoff_position := Vector2.ZERO
 
 func _ready() -> void:
 	set_control_texture()
@@ -68,8 +69,9 @@ func _process(delta: float) -> void:
 	process_gravity(delta)
 	move_and_slide()  # <- ¡Esto hace que realmente se mueva!
 
-func initialize(context_position: Vector2, context_ball: Ball, context_own_goal: Goal, context_target_goal: Goal, context_player_data: PlayerResource, context_country: String) -> void:
+func initialize(context_position: Vector2, context_kickoff_position: Vector2, context_ball: Ball, context_own_goal: Goal, context_target_goal: Goal, context_player_data: PlayerResource, context_country: String) -> void:
 	position = context_position
+	kickoff_position = context_kickoff_position
 	ball = context_ball
 	own_goal = context_own_goal
 	target_goal = context_target_goal
@@ -175,3 +177,10 @@ func on_team_scored(team_scored_on: String)-> void:
 		switch_state(Player.State.MOURNING)
 	else:
 		switch_state(Player.State.CELEBRATING)
+
+func face_towards_target_goal() -> void:
+	if not is_facing_target_goal():
+		heading = heading * -1
+
+func is_ready_for_kickoff() -> bool:
+	return current_state != null and current_state.is_ready_for_kickoff()
