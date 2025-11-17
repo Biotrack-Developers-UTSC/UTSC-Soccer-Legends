@@ -1,5 +1,6 @@
-[gd_scene load_steps=15 format=3 uid="uid://i5jl45wd163d"]
+[gd_scene load_steps=16 format=3 uid="uid://i5jl45wd163d"]
 
+[ext_resource type="Script" uid="uid://i0r8ca0yct70" path="res://scenes/screens/main_menu/main_menu_screen.gd" id="1_ai35v"]
 [ext_resource type="Texture2D" uid="uid://d3xmswxt2sphp" path="res://assets/art/ui/mainmenu/menu-background.png" id="1_vkt5c"]
 [ext_resource type="Texture2D" uid="uid://b5h1s8ps4pg6c" path="res://assets/art/ui/mainmenu/title.png" id="2_mf2mp"]
 [ext_resource type="Texture2D" uid="uid://j1dfwrjsu2y2" path="res://assets/art/ui/mainmenu/menu-mask.png" id="3_lk734"]
@@ -96,6 +97,20 @@ tracks/6/keys = {
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
 "values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/7/type = "method"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath(".")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(1.2),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"on_set_active"
+}]
 }
 
 [sub_resource type="Animation" id="Animation_1h8ap"]
@@ -194,6 +209,7 @@ _data = {
 [sub_resource type="Animation" id="Animation_du1io"]
 resource_name = "rotate"
 length = 0.2
+loop_mode = 1
 step = 0.05
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -236,6 +252,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_ai35v")
 
 [node name="Background" type="TextureRect" parent="."]
 layout_mode = 0
@@ -294,6 +311,7 @@ grow_vertical = 0
 texture = ExtResource("5_fa0uo")
 
 [node name="SinglePlayerTexture" type="TextureRect" parent="Background"]
+unique_name_in_owner = true
 layout_mode = 1
 offset_left = 35.0
 offset_top = 100.0
@@ -303,6 +321,7 @@ texture = ExtResource("6_fa0uo")
 stretch_mode = 2
 
 [node name="TwoPlayerTexture" type="TextureRect" parent="Background"]
+unique_name_in_owner = true
 layout_mode = 1
 offset_left = 30.0
 offset_top = 125.0
@@ -312,6 +331,7 @@ texture = ExtResource("7_3kkw7")
 stretch_mode = 2
 
 [node name="SelectionIcon" type="TextureRect" parent="Background"]
+unique_name_in_owner = true
 layout_mode = 0
 offset_left = 10.0
 offset_top = 100.0
@@ -331,3 +351,4 @@ autoplay = "start"
 libraries = {
 &"": SubResource("AnimationLibrary_nawi7")
 }
+autoplay = "rotate"
