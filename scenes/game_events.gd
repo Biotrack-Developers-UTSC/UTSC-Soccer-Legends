@@ -8,3 +8,4 @@ signal kickoff_started
 signal score_changed
 signal team_reset
 signal team_scored(country_scored_on: String)
+signal impact_received(impact_position: Vector2, is_high_impact: bool)

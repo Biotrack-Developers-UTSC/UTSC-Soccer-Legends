@@ -1,4 +1,4 @@
-[gd_scene load_steps=33 format=3 uid="uid://bx4v5gvm752ys"]
+[gd_scene load_steps=37 format=3 uid="uid://bx4v5gvm752ys"]
 
 [ext_resource type="Texture2D" uid="uid://c1b2qmkgq1rmp" path="res://assets/art/characters/soccer-player.png" id="1_rp718"]
 [ext_resource type="Script" uid="uid://b84byckstgeb8" path="res://scenes/characters/player.gd" id="1_yewv4"]
@@ -7,6 +7,23 @@
 [ext_resource type="Texture2D" uid="uid://3ions2qmibne" path="res://assets/art/props/1p.png" id="3_dyp2m"]
 [ext_resource type="Texture2D" uid="uid://g6a54xvb7cjq" path="res://assets/art/palettes/teams-color-palette.png" id="3_kqtwu"]
 [ext_resource type="Texture2D" uid="uid://covsuywu7h12p" path="res://assets/art/characters/player-shadow.png" id="4_atpat"]
+[ext_resource type="Texture2D" uid="uid://japhyvus3b26" path="res://assets/art/particles/white-circle.png" id="8_eojnx"]
+
+[sub_resource type="Curve" id="Curve_eojnx"]
+_data = [Vector2(0, 0.24719107), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_qgnko"]
+curve = SubResource("Curve_eojnx")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_qgnko"]
+particle_flag_disable_z = true
+emission_shape = 1
+emission_sphere_radius = 1.0
+gravity = Vector3(0, -80, 0)
+scale_min = 0.29999998
+scale_max = 0.79999995
+scale_curve = SubResource("CurveTexture_qgnko")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_kqtwu"]
 resource_local_to_scene = true
@@ -397,6 +414,16 @@ collision_layer = 2
 collision_mask = 9
 script = ExtResource("1_yewv4")
 
+[node name="RootParticles" type="Node2D" parent="."]
+unique_name_in_owner = true
+
+[node name="RunParticles" type="GPUParticles2D" parent="RootParticles"]
+unique_name_in_owner = true
+position = Vector2(-5, 0)
+texture = ExtResource("8_eojnx")
+lifetime = 0.4
+process_material = SubResource("ParticleProcessMaterial_qgnko")
+
 [node name="PlayerSprite" type="Sprite2D" parent="."]
 unique_name_in_owner = true
 material = SubResource("ShaderMaterial_kqtwu")
@@ -443,12 +470,12 @@ offset = Vector2(-8, -15)
 
 [node name="BallDetectionArea" type="Area2D" parent="."]
 unique_name_in_owner = true
+visible = false
 position = Vector2(0, -8)
 collision_layer = 0
 collision_mask = 4
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="BallDetectionArea"]
-visible = false
 rotation = 1.5707964
 shape = SubResource("CapsuleShape2D_2l4js")
 
