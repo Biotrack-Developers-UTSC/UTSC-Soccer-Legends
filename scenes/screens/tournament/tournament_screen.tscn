@@ -10,6 +10,7 @@
 
 [node name="TournamentScreen" type="Node"]
 script = ExtResource("1_hvkgv")
+music = 3
 
 [node name="background" type="TextureRect" parent="."]
 offset_right = 40.0
@@ -29,6 +30,7 @@ theme_override_constants/separation = 0
 alignment = 1
 
 [node name="QFLeftContainer" type="VBoxContainer" parent="background/BracketsContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/separation = 0
 alignment = 1
@@ -62,6 +64,7 @@ custom_minimum_size = Vector2(2, 0)
 layout_mode = 2
 
 [node name="SFLeftContainer" type="VBoxContainer" parent="background/BracketsContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/separation = 0
 alignment = 1
@@ -81,6 +84,7 @@ custom_minimum_size = Vector2(2, 0)
 layout_mode = 2
 
 [node name="FinalLeftContainer" type="VBoxContainer" parent="background/BracketsContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/separation = 0
 alignment = 1
@@ -99,6 +103,7 @@ layout_mode = 2
 texture = ExtResource("5_ru4pj")
 
 [node name="FinalRightContainer" type="VBoxContainer" parent="background/BracketsContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/separation = 0
 alignment = 1
@@ -111,6 +116,7 @@ custom_minimum_size = Vector2(2, 0)
 layout_mode = 2
 
 [node name="SFRightContainer" type="VBoxContainer" parent="background/BracketsContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/separation = 0
 alignment = 1
@@ -130,6 +136,7 @@ custom_minimum_size = Vector2(2, 0)
 layout_mode = 2
 
 [node name="QFRightContainer" type="VBoxContainer" parent="background/BracketsContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/separation = 0
 alignment = 1
@@ -185,6 +192,7 @@ grow_horizontal = 2
 texture = ExtResource("6_7eqbv")
 
 [node name="StageTexture" type="TextureRect" parent="background"]
+unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
@@ -197,6 +205,7 @@ grow_horizontal = 2
 texture = ExtResource("7_702pu")
 
 [node name="WinnerContainer" type="Control" parent="background"]
+unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
