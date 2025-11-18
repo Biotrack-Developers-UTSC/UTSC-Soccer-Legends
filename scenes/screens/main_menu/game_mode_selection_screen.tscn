@@ -1,0 +1,58 @@
+[gd_scene load_steps=6 format=3 uid="uid://brr40lhav6sn4"]
+
+[ext_resource type="Texture2D" uid="uid://ly2y21gp5ui" path="res://assets/art/ui/teamselection/team-selection-background.png" id="1_7bay2"]
+[ext_resource type="Script" uid="uid://bnlgsumlqkb5u" path="res://scenes/screens/main_menu/game_mode_selection_screen.gd" id="1_gv4ri"]
+[ext_resource type="Texture2D" uid="uid://8gitk7hf4hy4" path="res://assets/art/ui/game_mode_selection/select_game_mode.png" id="2_gv4ri"]
+[ext_resource type="PackedScene" uid="uid://b8gvy2oqepqox" path="res://scenes/screens/quiz/seleccion_botones_bracket_flag.tscn" id="4_htpnb"]
+[ext_resource type="PackedScene" uid="uid://ch0c8fii5d7tg" path="res://scenes/screens/quiz/boton_bracket_flag.tscn" id="5_vn4eu"]
+
+[node name="game_mode_selection_screen" type="Node"]
+script = ExtResource("1_gv4ri")
+
+[node name="Background" type="TextureRect" parent="."]
+offset_right = 40.0
+offset_bottom = 40.0
+texture = ExtResource("1_7bay2")
+
+[node name="TeamSelectTexture" type="TextureRect" parent="Background"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -80.0
+offset_top = 5.0
+offset_right = 100.0
+offset_bottom = 65.0
+grow_horizontal = 2
+texture = ExtResource("2_gv4ri")
+expand_mode = 1
+
+[node name="GameModesContainer" type="Control" parent="Background"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="SeleccionBotonesBracketFlag" parent="Background/GameModesContainer" instance=ExtResource("4_htpnb")]
+layout_mode = 0
+offset_left = 65.0
+offset_top = 75.0
+offset_right = 135.0
+offset_bottom = 125.0
+
+[node name="SeleccionBotonesBracketFlag2" parent="Background/GameModesContainer" instance=ExtResource("4_htpnb")]
+layout_mode = 0
+offset_left = 145.0
+offset_top = 75.0
+offset_right = 215.0
+offset_bottom = 125.0
+
+[node name="BotonBracketFlag" parent="Background/GameModesContainer" instance=ExtResource("5_vn4eu")]
+layout_mode = 0
+offset_left = 115.0
+offset_top = 130.0
+offset_right = 165.0
+offset_bottom = 162.0

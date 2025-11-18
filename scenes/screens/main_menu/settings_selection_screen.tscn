@@ -1,0 +1,64 @@
+[gd_scene load_steps=5 format=3 uid="uid://dx3u218ajkhi0"]
+
+[ext_resource type="Script" uid="uid://73s4ahjf7k4e" path="res://scenes/screens/main_menu/settings_selection_screen.gd" id="1_48481"]
+[ext_resource type="Texture2D" uid="uid://ly2y21gp5ui" path="res://assets/art/ui/teamselection/team-selection-background.png" id="1_a801y"]
+[ext_resource type="Texture2D" uid="uid://t45gvbeqqb6c" path="res://assets/art/ui/game_mode_selection/select_menu_options.png" id="2_wx5lj"]
+[ext_resource type="PackedScene" uid="uid://ch0c8fii5d7tg" path="res://scenes/screens/quiz/boton_bracket_flag.tscn" id="4_t2ae1"]
+
+[node name="settings_selection_screen" type="Node"]
+script = ExtResource("1_48481")
+
+[node name="Background" type="TextureRect" parent="."]
+offset_right = 40.0
+offset_bottom = 40.0
+texture = ExtResource("1_a801y")
+
+[node name="TeamSelectTexture" type="TextureRect" parent="Background"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -90.0
+offset_top = 5.0
+offset_right = 90.0
+offset_bottom = 65.0
+grow_horizontal = 2
+texture = ExtResource("2_wx5lj")
+expand_mode = 1
+
+[node name="OptionsContainer" type="Control" parent="Background"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="BotonBracketFlag" parent="Background/OptionsContainer" instance=ExtResource("4_t2ae1")]
+layout_mode = 0
+offset_left = 65.0
+offset_top = 75.0
+offset_right = 115.0
+offset_bottom = 107.0
+
+[node name="BotonBracketFlag2" parent="Background/OptionsContainer" instance=ExtResource("4_t2ae1")]
+layout_mode = 0
+offset_left = 150.0
+offset_top = 75.0
+offset_right = 200.0
+offset_bottom = 107.0
+
+[node name="BotonBracketFlag3" parent="Background/OptionsContainer" instance=ExtResource("4_t2ae1")]
+layout_mode = 0
+offset_left = 65.0
+offset_top = 120.0
+offset_right = 115.0
+offset_bottom = 152.0
+
+[node name="BotonBracketFlag4" parent="Background/OptionsContainer" instance=ExtResource("4_t2ae1")]
+layout_mode = 0
+offset_left = 150.0
+offset_top = 120.0
+offset_right = 200.0
+offset_bottom = 152.0

@@ -51,6 +51,7 @@ tracks/0/keys = {
 [sub_resource type="Animation" id="Animation_eojnx"]
 resource_name = "bicycle_kick"
 length = 0.4
+loop_mode = 1
 step = 0.1
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -151,6 +152,7 @@ tracks/0/keys = {
 [sub_resource type="Animation" id="Animation_7vyk4"]
 resource_name = "header"
 length = 0.2
+loop_mode = 1
 step = 0.1
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -168,7 +170,7 @@ tracks/0/keys = {
 [sub_resource type="Animation" id="Animation_xhtjm"]
 resource_name = "hurt"
 length = 0.2
-loop_mode = 2
+loop_mode = 1
 step = 0.1
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -204,6 +206,7 @@ tracks/0/keys = {
 [sub_resource type="Animation" id="Animation_6eyoc"]
 resource_name = "kick"
 length = 0.15
+loop_mode = 1
 step = 0.05
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -304,7 +307,6 @@ tracks/0/keys = {
 [sub_resource type="Animation" id="Animation_dyp2m"]
 resource_name = "tackle"
 length = 0.1
-loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -321,6 +323,7 @@ tracks/0/keys = {
 [sub_resource type="Animation" id="Animation_qgnko"]
 resource_name = "volley_kick"
 length = 0.3
+loop_mode = 1
 step = 0.1
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -419,6 +422,7 @@ unique_name_in_owner = true
 
 [node name="RunParticles" type="GPUParticles2D" parent="RootParticles"]
 unique_name_in_owner = true
+visible = false
 position = Vector2(-5, 0)
 texture = ExtResource("8_eojnx")
 lifetime = 0.4

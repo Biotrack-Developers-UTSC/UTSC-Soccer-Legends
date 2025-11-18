@@ -8,6 +8,10 @@ func _init() -> void:
 		SoccerGame.ScreenType.TOURNAMENT: preload("res://scenes/screens/tournament/tournament_screen.tscn"),
 		SoccerGame.ScreenType.TEAM_SELECTION: preload("res://scenes/screens/team_selection/team_selection_screen.tscn"),
 		SoccerGame.ScreenType.IN_GAME: preload("res://scenes/screens/world/world_screen.tscn"),
+		SoccerGame.ScreenType.GAME_MODE_SELECTION: preload("res://scenes/screens/main_menu/game_mode_selection_screen.tscn"),
+		SoccerGame.ScreenType.OPTIONS_SELECTION: preload("res://scenes/screens/main_menu/settings_selection_screen.tscn"),
+		#SoccerGame.ScreenType.CONTROLS: preload("res://scenes/screens/main_menu/controls_screen.tscn"),
+		#SoccerGame.ScreenType.ABOUT: preload("res://scenes/screens/main_menu/about_screen.tscn"),
 		#SoccerGame.ScreenType.QUIZ: preload(),
 	}
 

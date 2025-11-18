@@ -1,0 +1,73 @@
+[gd_scene load_steps=5 format=3 uid="uid://b8gvy2oqepqox"]
+
+[ext_resource type="Texture2D" uid="uid://2d6i1bgrxf8i" path="res://assets/art/ui/flags/flag-placeholder.png" id="1_wntej"]
+[ext_resource type="Script" uid="uid://5arnj48n1mkg" path="res://scenes/screens/quiz/seleccion_botones_bracket_flag.gd" id="2_0wvnh"]
+[ext_resource type="Texture2D" uid="uid://bkhjl2k11y6sx" path="res://assets/art/ui/flags/flag-selection.png" id="3_rg2w7"]
+[ext_resource type="Texture2D" uid="uid://dh7tewwthm2ak" path="res://assets/art/ui/game_mode_selection/trophy_icon.png" id="4_0wvnh"]
+
+[node name="SeleccionBotonesBracketFlag" type="TextureRect"]
+custom_minimum_size = Vector2(70, 50)
+offset_right = 40.0
+offset_bottom = 40.0
+texture = ExtResource("1_wntej")
+script = ExtResource("2_0wvnh")
+metadata/_custom_type_script = "uid://b1tn8is6a65bb"
+
+[node name="ColorRect" type="ColorRect" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 3.0
+offset_top = 3.0
+offset_right = -3.0
+offset_bottom = -3.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.44313726, 0.94509804, 0.33333334, 0.7058824)
+
+[node name="SeleccionBotonesLabel" type="Label" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -26.0
+offset_right = 27.0
+offset_bottom = 14.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+text = "TOURNAMENT"
+horizontal_alignment = 1
+
+[node name="TextureRect" type="TextureRect" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -2.0
+offset_top = -2.0
+offset_right = 2.0
+offset_bottom = 2.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_rg2w7")
+
+[node name="IconRect" type="TextureRect" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -20.0
+offset_top = -36.0
+offset_right = 20.0
+offset_bottom = -6.0
+grow_horizontal = 2
+grow_vertical = 0
+texture = ExtResource("4_0wvnh")
+expand_mode = 1
