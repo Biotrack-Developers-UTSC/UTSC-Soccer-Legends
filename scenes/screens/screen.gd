@@ -15,5 +15,7 @@ func setup(context_game: SoccerGame, context_data: ScreenData) -> void:
 	game = context_game
 	screen_data = context_data
 
-func transition_screen(new_screen: SoccerGame.ScreenType, data: ScreenData = ScreenData.new()) -> void:
+func transition_screen(new_screen: SoccerGame.ScreenType, data: ScreenData = null) -> void:
+	if data == null:
+		data = screen_data  # Reutiliza el contexto actual si no hay nuevo
 	screen_transition_requested.emit(new_screen, data)

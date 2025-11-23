@@ -7,7 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://u1meyud4oeaw" path="res://scenes/ball/ball.tscn" id="5_wl3ba"]
 [ext_resource type="PackedScene" uid="uid://b8gvy2oqepqox" path="res://scenes/screens/quiz/seleccion_botones_bracket_flag.tscn" id="6_o3hpn"]
 
-[node name="quiz_game_screen" type="Node"]
+[node name="AnimalsQuizScreen" type="Node"]
 
 [node name="TextureRect" type="TextureRect" parent="."]
 anchors_preset = 15

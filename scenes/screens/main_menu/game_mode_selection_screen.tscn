@@ -1,12 +1,11 @@
-[gd_scene load_steps=6 format=3 uid="uid://brr40lhav6sn4"]
+[gd_scene load_steps=5 format=3 uid="uid://brr40lhav6sn4"]
 
 [ext_resource type="Texture2D" uid="uid://ly2y21gp5ui" path="res://assets/art/ui/teamselection/team-selection-background.png" id="1_7bay2"]
 [ext_resource type="Script" uid="uid://bnlgsumlqkb5u" path="res://scenes/screens/main_menu/game_mode_selection_screen.gd" id="1_gv4ri"]
 [ext_resource type="Texture2D" uid="uid://8gitk7hf4hy4" path="res://assets/art/ui/game_mode_selection/select_game_mode.png" id="2_gv4ri"]
 [ext_resource type="PackedScene" uid="uid://b8gvy2oqepqox" path="res://scenes/screens/quiz/seleccion_botones_bracket_flag.tscn" id="4_htpnb"]
-[ext_resource type="PackedScene" uid="uid://ch0c8fii5d7tg" path="res://scenes/screens/quiz/boton_bracket_flag.tscn" id="5_vn4eu"]
 
-[node name="game_mode_selection_screen" type="Node"]
+[node name="GameModeSelectionScreen" type="Node"]
 script = ExtResource("1_gv4ri")
 
 [node name="Background" type="TextureRect" parent="."]
@@ -38,21 +37,35 @@ grow_vertical = 2
 
 [node name="SeleccionBotonesBracketFlag" parent="Background/GameModesContainer" instance=ExtResource("4_htpnb")]
 layout_mode = 0
-offset_left = 65.0
-offset_top = 75.0
-offset_right = 135.0
-offset_bottom = 125.0
+offset_left = 7.0
+offset_top = 30.0
+offset_right = 77.0
+offset_bottom = 80.0
 
 [node name="SeleccionBotonesBracketFlag2" parent="Background/GameModesContainer" instance=ExtResource("4_htpnb")]
 layout_mode = 0
-offset_left = 145.0
-offset_top = 75.0
-offset_right = 215.0
-offset_bottom = 125.0
+offset_left = 50.0
+offset_top = 80.0
+offset_right = 120.0
+offset_bottom = 130.0
 
-[node name="BotonBracketFlag" parent="Background/GameModesContainer" instance=ExtResource("5_vn4eu")]
+[node name="SeleccionBotonesBracketFlag3" parent="Background/GameModesContainer" instance=ExtResource("4_htpnb")]
 layout_mode = 0
-offset_left = 115.0
+offset_left = 105.0
 offset_top = 130.0
-offset_right = 165.0
-offset_bottom = 162.0
+offset_right = 175.0
+offset_bottom = 180.0
+
+[node name="SeleccionBotonesBracketFlag4" parent="Background/GameModesContainer" instance=ExtResource("4_htpnb")]
+layout_mode = 0
+offset_left = 160.0
+offset_top = 80.0
+offset_right = 230.0
+offset_bottom = 130.0
+
+[node name="SeleccionBotonesBracketFlag5" parent="Background/GameModesContainer" instance=ExtResource("4_htpnb")]
+layout_mode = 0
+offset_left = 206.0
+offset_top = 30.0
+offset_right = 276.0
+offset_bottom = 80.0

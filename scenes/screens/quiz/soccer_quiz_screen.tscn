@@ -1,0 +1,92 @@
+[gd_scene load_steps=8 format=3 uid="uid://d2o5ke8hnumnd"]
+
+[ext_resource type="Script" uid="uid://dbv2aobqoqmm6" path="res://scenes/screens/quiz/soccer_quiz_screen.gd" id="1_75uy0"]
+[ext_resource type="Texture2D" uid="uid://6n0aa1jkfcuf" path="res://assets/art/backgrounds/quiz_background.png" id="1_xnmon"]
+[ext_resource type="PackedScene" uid="uid://dhbk2vnt45bfn" path="res://scenes/goal/goal.tscn" id="2_75uy0"]
+[ext_resource type="PackedScene" uid="uid://ch0c8fii5d7tg" path="res://scenes/screens/quiz/boton_bracket_flag.tscn" id="3_obtf3"]
+[ext_resource type="PackedScene" uid="uid://bx4v5gvm752ys" path="res://scenes/characters/player.tscn" id="4_xomlc"]
+[ext_resource type="PackedScene" uid="uid://u1meyud4oeaw" path="res://scenes/ball/ball.tscn" id="5_pvq04"]
+[ext_resource type="PackedScene" uid="uid://b8gvy2oqepqox" path="res://scenes/screens/quiz/seleccion_botones_bracket_flag.tscn" id="6_ocqej"]
+
+[node name="SoccerQuizScreen" type="Node"]
+script = ExtResource("1_75uy0")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_xnmon")
+expand_mode = 1
+
+[node name="Goal" parent="TextureRect" instance=ExtResource("2_75uy0")]
+position = Vector2(25, 80)
+scale = Vector2(0.5, 0.5)
+
+[node name="Goal2" parent="TextureRect" instance=ExtResource("2_75uy0")]
+position = Vector2(25, 160)
+scale = Vector2(0.5, 0.5)
+
+[node name="Goal3" parent="TextureRect" instance=ExtResource("2_75uy0")]
+position = Vector2(245, 80)
+scale = Vector2(-0.5, 0.5)
+
+[node name="Goal4" parent="TextureRect" instance=ExtResource("2_75uy0")]
+position = Vector2(245, 160)
+scale = Vector2(-0.5, 0.5)
+
+[node name="BotonBracketFlag" parent="TextureRect" instance=ExtResource("3_obtf3")]
+layout_mode = 0
+offset_left = 40.0
+offset_top = 45.0
+offset_right = 90.0
+offset_bottom = 77.0
+
+[node name="BotonBracketFlag2" parent="TextureRect" instance=ExtResource("3_obtf3")]
+layout_mode = 0
+offset_left = 40.0
+offset_top = 125.0
+offset_right = 90.0
+offset_bottom = 157.0
+
+[node name="BotonBracketFlag3" parent="TextureRect" instance=ExtResource("3_obtf3")]
+layout_mode = 0
+offset_left = 180.0
+offset_top = 45.0
+offset_right = 230.0
+offset_bottom = 77.0
+
+[node name="BotonBracketFlag4" parent="TextureRect" instance=ExtResource("3_obtf3")]
+layout_mode = 0
+offset_left = 180.0
+offset_top = 125.0
+offset_right = 230.0
+offset_bottom = 157.0
+
+[node name="Player" parent="TextureRect" node_paths=PackedStringArray("ball") instance=ExtResource("4_xomlc")]
+position = Vector2(120, 80)
+ball = NodePath("../Ball")
+
+[node name="Player2" parent="TextureRect" node_paths=PackedStringArray("ball") instance=ExtResource("4_xomlc")]
+position = Vector2(160, 80)
+ball = NodePath("../Ball")
+
+[node name="Ball" parent="TextureRect" instance=ExtResource("5_pvq04")]
+position = Vector2(140, 105)
+
+[node name="SeleccionBotonesBracketFlag" parent="TextureRect" instance=ExtResource("6_ocqej")]
+custom_minimum_size = Vector2(70, 20)
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -70.0
+offset_right = 70.0
+offset_bottom = 30.0
+grow_horizontal = 2
+
+[node name="IconRect" parent="TextureRect/SeleccionBotonesBracketFlag" index="3"]
+visible = false
+
+[editable path="TextureRect/SeleccionBotonesBracketFlag"]
