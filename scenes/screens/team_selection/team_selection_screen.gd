@@ -153,7 +153,28 @@ func on_selector_selected() -> void:
 			transition_screen(SoccerGame.ScreenType.CUSTOM_MATCH, screen_data)
 		"tournament":
 			print("🏆 Iniciando TOURNAMENT (modo 2 jugadores)...")
+			var p1 := GameManager.player_setup[0]
+			var p2 := GameManager.player_setup[1]
+			var all_countries := DataLoader.get_countries()
+			var available_countries: Array[String] = []
+			# Tomamos solo países válidos (ignoramos posibles vacíos o placeholders)
+			for i in range(1, all_countries.size()):
+				if all_countries[i] != "" and all_countries[i] != null:
+					available_countries.append(all_countries[i])
+			# Quitamos los elegidos por los jugadores
+			available_countries.erase(p1)
+			available_countries.erase(p2)
+			# Mezclamos y tomamos 6 rivales distintos
+			available_countries.shuffle()
+			var cpu_countries := available_countries.slice(0, 6)
+			# ✅ Creamos lista final: jugadores primero para enfrentarse en el 1er match
+			var tournament_countries: Array[String] = [p1, p2]
+			tournament_countries.append_array(cpu_countries)
+			print("🎮 Equipos del torneo (cuartos):", tournament_countries)
+			# Creamos torneo manualmente
 			var new_tournament := Tournament.new(false)
+			new_tournament.matches.clear()
+			new_tournament.create_bracket(Tournament.Stage.QUARTER_FINALS, tournament_countries)
 			screen_data.set_tournament(new_tournament)
 			transition_screen(SoccerGame.ScreenType.TOURNAMENT, screen_data)
 		_:
