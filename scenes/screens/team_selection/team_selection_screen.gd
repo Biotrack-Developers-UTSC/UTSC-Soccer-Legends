@@ -76,10 +76,10 @@ func add_selector(control_scheme: Player.ControlScheme) -> void:
 # --- Al seleccionar ---
 func on_selector_selected() -> void:
 	var mode := screen_data.mode if screen_data != null else ""
+	
 	# --- CUSTOM MATCH ---
 	if mode == "custom_match":
 		if selectors.size() == 1:
-			print("🟧 Custom Match: P1 eligió su equipo. Creando CPU selector controlado por P1...")
 			var cpu_selector := FLAG_SELECTOR_PREFAB.instantiate()
 			cpu_selector.control_scheme = Player.ControlScheme.P1
 			cpu_selector.is_cpu = true
@@ -91,58 +91,46 @@ func on_selector_selected() -> void:
 			cpu_selector.position = flags_container.get_child(0).position
 			GameManager.player_setup.resize(2)
 			GameManager.player_setup[1] = ""
-			print("🤖 CPU listo para selección con controles de P1.")
 			return
 
-	# --- TOURNAMENT (1 jugador) ---
+	# --- TOURNAMENT (1 JUGADOR) ---
 	if mode == "tournament" and selectors.size() == 1:
-		print("🏆 Modo torneo (1 jugador): completando torneo automáticamente.")
+		var p1 = GameManager.player_setup[0]
+		var safe_countries = _get_safe_country_list()
+		safe_countries.erase(p1)
+		safe_countries.shuffle()
+		
+		var tournament_countries: Array[String] = [p1]
+		# Tomamos hasta 7 rivales seguros
+		tournament_countries.append_array(safe_countries.slice(0, 7))
+		
+		# Relleno de emergencia si faltan (repite seguros)
+		while tournament_countries.size() < 8:
+			tournament_countries.append(safe_countries[randi() % safe_countries.size()])
 
-		# --- Obtener los países disponibles ---
-		var countries_full := DataLoader.get_countries()  # Array[String]
-		var countries: Array[String] = []
-		for i in range(1, 9):  # índices 1 a 8
-			countries.append(countries_full[i])
-
-		# --- Eliminar el país del jugador y mezclar el resto ---
-		var player_country := GameManager.player_setup[0]
-		countries.erase(player_country)
-		countries.shuffle()
-
-		# --- Crear un Array[String] seguro combinando P1 y rivales ---
-		var tournament_countries: Array[String] = [player_country]
-		for c in countries.slice(0, 7):
-			tournament_countries.append(c)
-
-		# --- Crear torneo ---
-		var new_tournament := Tournament.new(false)
-		new_tournament.matches.clear()
-		new_tournament.create_bracket(Tournament.Stage.QUARTER_FINALS, tournament_countries)
-		screen_data.set_tournament(new_tournament)
-		print("✅ Torneo 1 jugador listo con 8 equipos.")
-		transition_screen(SoccerGame.ScreenType.TOURNAMENT, screen_data)
+		_start_tournament(tournament_countries)
 		return
 
-	# --- Resto: espera que ambos selectores estén listos ---
+	# --- ESPERAR A QUE AMBOS JUGADORES ELIJAN ---
 	for selector in selectors:
 		if not selector.is_selected:
 			return
+			
 	var country_p1 := GameManager.player_setup[0]
 	var country_p2 := GameManager.player_setup[1]
+	
 	if country_p2.is_empty() or country_p1 == country_p2:
 		push_warning("⚠️ Debes seleccionar dos equipos distintos.")
 		return
+		
 	GameManager.current_match = Match.new(country_p2, country_p1)
-	print("🎮 TeamSelectionScreen - Modo seleccionado:", mode)
+	
 	match mode:
 		"animals_quiz":
-			print("🐾 Iniciando ANIMALS_QUIZ...")
 			transition_screen(SoccerGame.ScreenType.ANIMALS_QUIZ, screen_data)
 		"soccer_quiz":
-			print("⚽ Iniciando SOCCER_QUIZ...")
 			transition_screen(SoccerGame.ScreenType.SOCCER_QUIZ, screen_data)
 		"custom_match":
-			print("🟧 Iniciando CUSTOM_MATCH (final directa)...")
 			var custom_tournament := Tournament.new(true)
 			custom_tournament.current_stage = Tournament.Stage.FINALS
 			custom_tournament.matches = {
@@ -151,32 +139,66 @@ func on_selector_selected() -> void:
 			}
 			screen_data.set_tournament(custom_tournament)
 			transition_screen(SoccerGame.ScreenType.CUSTOM_MATCH, screen_data)
+			
 		"tournament":
-			print("🏆 Iniciando TOURNAMENT (modo 2 jugadores)...")
+			print("🏆 Iniciando TOURNAMENT (2 jugadores)...")
 			var p1 := GameManager.player_setup[0]
 			var p2 := GameManager.player_setup[1]
-			var all_countries := DataLoader.get_countries()
-			var available_countries: Array[String] = []
-			# Tomamos solo países válidos (ignoramos posibles vacíos o placeholders)
-			for i in range(1, all_countries.size()):
-				if all_countries[i] != "" and all_countries[i] != null:
-					available_countries.append(all_countries[i])
-			# Quitamos los elegidos por los jugadores
-			available_countries.erase(p1)
-			available_countries.erase(p2)
-			# Mezclamos y tomamos 6 rivales distintos
-			available_countries.shuffle()
-			var cpu_countries := available_countries.slice(0, 6)
-			# ✅ Creamos lista final: jugadores primero para enfrentarse en el 1er match
-			var tournament_countries: Array[String] = [p1, p2]
-			tournament_countries.append_array(cpu_countries)
-			print("🎮 Equipos del torneo (cuartos):", tournament_countries)
-			# Creamos torneo manualmente
-			var new_tournament := Tournament.new(false)
-			new_tournament.matches.clear()
-			new_tournament.create_bracket(Tournament.Stage.QUARTER_FINALS, tournament_countries)
-			screen_data.set_tournament(new_tournament)
-			transition_screen(SoccerGame.ScreenType.TOURNAMENT, screen_data)
+			
+			# 1. Obtener lista LIMPIA de países (sin vacíos, sin DEFAULT, con imagen)
+			var safe_countries = _get_safe_country_list()
+			safe_countries.erase(p1)
+			safe_countries.erase(p2)
+			safe_countries.shuffle()
+			
+			# Función segura para sacar rivales
+			var get_rival = func() -> String:
+				if safe_countries.size() > 0:
+					return safe_countries.pop_front()
+				# Si se acaban, repetimos uno aleatorio de la lista limpia
+				var backup = _get_safe_country_list()
+				return backup[randi() % backup.size()]
+			
+			# 2. Construir Bracket Manualmente
+			var tournament_countries: Array[String] = []
+			
+			# --- LADO IZQUIERDO ---
+			tournament_countries.append(p1)            
+			tournament_countries.append(get_rival.call())
+			tournament_countries.append(get_rival.call())
+			tournament_countries.append(get_rival.call())
+			
+			# --- LADO DERECHO ---
+			tournament_countries.append(p2)            
+			tournament_countries.append(get_rival.call())
+			tournament_countries.append(get_rival.call())
+			tournament_countries.append(get_rival.call())
+
+			print("🎮 Equipos Generados: ", tournament_countries)
+			_start_tournament(tournament_countries)
+
 		_:
-			print("❌ Modo desconocido — volviendo al menú principal.")
 			transition_screen(SoccerGame.ScreenType.MAIN_MENU)
+
+# --- Helper CORREGIDO para prohibir DEFAULT ---
+func _get_safe_country_list() -> Array[String]:
+	var raw_list = DataLoader.get_countries()
+	var clean_list: Array[String] = []
+	for c in raw_list:
+		# 1. Prohibir explícitamente "DEFAULT"
+		if c == null or c.strip_edges() == "" or c == "DEFAULT":
+			continue
+		# 2. Verificar que tenga imagen
+		if FlagHelper.get_texture(c) == null:
+			continue
+		
+		clean_list.append(c)
+	return clean_list
+
+# --- Helper para iniciar torneo ---
+func _start_tournament(teams: Array[String]) -> void:
+	var new_tournament := Tournament.new(false)
+	new_tournament.matches.clear()
+	new_tournament.create_bracket(Tournament.Stage.QUARTER_FINALS, teams)
+	screen_data.set_tournament(new_tournament)
+	transition_screen(SoccerGame.ScreenType.TOURNAMENT, screen_data)

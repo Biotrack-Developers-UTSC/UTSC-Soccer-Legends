@@ -30,7 +30,6 @@ alignment = 1
 
 [node name="QFLeftContainer" type="VBoxContainer" parent="background/BracketsContainer"]
 unique_name_in_owner = true
-visible = false
 layout_mode = 2
 theme_override_constants/separation = 0
 alignment = 1
@@ -60,13 +59,11 @@ texture = ExtResource("4_dadku")
 layout_mode = 2
 
 [node name="HPadding" type="Control" parent="background/BracketsContainer"]
-visible = false
 custom_minimum_size = Vector2(2, 0)
 layout_mode = 2
 
 [node name="SFLeftContainer" type="VBoxContainer" parent="background/BracketsContainer"]
 unique_name_in_owner = true
-visible = false
 layout_mode = 2
 theme_override_constants/separation = 0
 alignment = 1
@@ -82,7 +79,6 @@ texture = ExtResource("4_dadku")
 layout_mode = 2
 
 [node name="HPadding3" type="Control" parent="background/BracketsContainer"]
-visible = false
 custom_minimum_size = Vector2(2, 0)
 layout_mode = 2
 
@@ -115,13 +111,11 @@ alignment = 1
 layout_mode = 2
 
 [node name="HPadding4" type="Control" parent="background/BracketsContainer"]
-visible = false
 custom_minimum_size = Vector2(2, 0)
 layout_mode = 2
 
 [node name="SFRightContainer" type="VBoxContainer" parent="background/BracketsContainer"]
 unique_name_in_owner = true
-visible = false
 layout_mode = 2
 theme_override_constants/separation = 0
 alignment = 1
@@ -137,13 +131,11 @@ texture = ExtResource("4_dadku")
 layout_mode = 2
 
 [node name="HPadding2" type="Control" parent="background/BracketsContainer"]
-visible = false
 custom_minimum_size = Vector2(2, 0)
 layout_mode = 2
 
 [node name="QFRightContainer" type="VBoxContainer" parent="background/BracketsContainer"]
 unique_name_in_owner = true
-visible = false
 layout_mode = 2
 theme_override_constants/separation = 0
 alignment = 1

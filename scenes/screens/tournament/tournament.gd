@@ -4,75 +4,80 @@ extends Node
 enum Stage { QUARTER_FINALS, SEMI_FINALS, FINALS, COMPLETE }
 
 var current_stage: Stage = Stage.QUARTER_FINALS
-var matches := {} # Diccionario Stage -> Array[Match]
-var winner: String = ""
-var is_custom: bool = false
+var matches := {}
+var winner := ""
+var is_custom := false
 
 func _init(custom_mode: bool = false) -> void:
 	is_custom = custom_mode
 	if is_custom:
 		matches = { Stage.FINALS: [] }
 		current_stage = Stage.FINALS
-		print("🏁 Torneo custom inicializado (solo final).")
 		return
-
-	var countries := DataLoader.get_countries().slice(1, 9)
-	countries.shuffle()
-	create_bracket(Stage.QUARTER_FINALS, countries)
+	
+	# Obtener países y filtrar "DEFAULT"
+	var raw_countries := DataLoader.get_countries()
+	var valid_countries: Array[String] = []
+	for c in raw_countries:
+		if c != "DEFAULT" and c != "":
+			valid_countries.append(c)
+			
+	valid_countries.shuffle()
+	create_bracket(Stage.QUARTER_FINALS, valid_countries.slice(0, 8))
 
 func create_bracket(stage: Stage, countries: Array[String]) -> void:
 	matches[stage] = []
 
 	if countries.size() == 2:
 		matches[stage].append(Match.new(countries[0], countries[1]))
-		print("🏁 Bracket directo con 2 países:", countries)
 		return
 
 	if stage == Stage.QUARTER_FINALS:
-		var all_countries := DataLoader.get_countries().slice(1)
-		var used := countries.duplicate()
-		for c in all_countries:
-			if c not in used:
-				used.append(c)
-			if used.size() >= 8:
-				break
-		countries = used
+		# Relleno de seguridad
+		var raw_pool := DataLoader.get_countries()
+		var safe_pool: Array[String] = []
+		for c in raw_pool:
+			if c != "DEFAULT" and c != "":
+				safe_pool.append(c)
+		while countries.size() < 8:
+			countries.append(safe_pool[randi() % safe_pool.size()])
 
-	if countries.size() >= 8 and GameManager.player_setup.size() >= 2:
-		var p1 = GameManager.player_setup[0]
-		var p2 = GameManager.player_setup[1]
-		if countries.has(p1) and countries.has(p2):
-			countries.erase(p1)
-			countries.erase(p2)
-			countries.insert(0, p1)
-			countries.insert(1, p2)
-			print("🎯 Emparejamiento forzado: P1 vs P2 en el primer match de cuartos.")
+		# 🔥 LÓGICA DE ENFRENTAMIENTO DIRECTO (P1 vs P2) 🔥
+		# Si hay 2 jugadores, los forzamos a las posiciones 0 y 1
+		# para que se enfrenten en el primer Match.
+		if GameManager.player_setup.size() >= 2:
+			var p1 = GameManager.player_setup[0]
+			var p2 = GameManager.player_setup[1]
+			
+			if not p2.is_empty(): # Solo si P2 existe
+				# Quitamos a P1 y P2 de donde estén en la lista aleatoria
+				if countries.has(p1): countries.erase(p1)
+				if countries.has(p2): countries.erase(p2)
+				
+				# Los insertamos al principio juntos
+				countries.insert(0, p1)
+				countries.insert(1, p2)
+				print("⚔️ MODIFICACIÓN: P1 vs P2 forzados en Cuartos de Final.")
 
-	if countries.size() % 2 != 0:
-		countries.append(countries[-1])
-
-	while countries.size() < 8:
-		countries.append(countries[randi() % countries.size()])
-
+	# Emparejar
 	for i in range(0, countries.size(), 2):
-		var home := countries[i]
-		var away := countries[i + 1] if i + 1 < countries.size() else countries[i]
-		matches[stage].append(Match.new(home, away))
-
-	print("✅ Bracket creado en stage", stage, "con", matches[stage].size(), "matches y", countries.size(), "países.")
+		var h = countries[i]
+		var a = countries[i+1] if i+1 < countries.size() else h
+		matches[stage].append(Match.new(h, a))
 
 func advance() -> void:
-	if current_stage < Stage.COMPLETE:
-		var stage_matches: Array = matches.get(current_stage, [])
-		var stage_winners: Array[String] = []
+	if current_stage == Stage.COMPLETE: return
 
-		for current_match: Match in stage_matches:
-			current_match.resolve()
-			stage_winners.append(current_match.winner)
+	var stage_matches = matches.get(current_stage, [])
+	var winners: Array[String] = []
 
-		current_stage = current_stage + 1 as Stage
+	for m: Match in stage_matches:
+		m.resolve()
+		winners.append(m.winner)
 
-		if current_stage == Stage.COMPLETE:
-			winner = stage_winners[0]
-		elif not is_custom:
-			create_bracket(current_stage, stage_winners)
+	current_stage += 1
+
+	if current_stage == Stage.COMPLETE:
+		winner = winners[0]
+	elif not is_custom:
+		create_bracket(current_stage, winners)

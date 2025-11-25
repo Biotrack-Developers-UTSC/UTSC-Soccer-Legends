@@ -310,43 +310,4 @@
 		"speed": 77,
 		"power": 167,
 	}]
-}, {
-	"country": "CANADA",
-	"players": [{
-		"name": "D.S. CLAIR",
-		"skin": 1,
-		"role": 0,
-		"speed": 75,
-		"power": 100,
-	}, {
-		"name": "A. JOHNSTON",
-		"skin": 0,
-		"role": 1,
-		"speed": 70,
-		"power": 140,
-	}, {
-		"name": "A. DAVIES",
-		"skin": 2,
-		"role": 1,
-		"speed": 65,
-		"power": 155,
-	}, {
-		"name": "A. AHMED",
-		"skin": 2,
-		"role": 2,
-		"speed": 65,
-		"power": 140,
-	}, {
-		"name": "T. BUCHANAN",
-		"skin": 1,
-		"role": 3,
-		"speed": 65,
-		"power": 125,
-	}, {
-		"name": "J. DAVID",
-		"skin": 2,
-		"role": 3,
-		"speed": 75,
-		"power": 150,
-	}]
 }]

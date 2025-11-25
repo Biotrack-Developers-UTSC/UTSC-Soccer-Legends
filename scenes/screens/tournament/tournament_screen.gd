@@ -17,9 +17,11 @@ const STAGE_TEXTURES := {
 
 @onready var stage_texture: TextureRect = %StageTexture
 var tournament: Tournament = null
-var player_country: String = GameManager.player_setup[0]
 
 func _ready() -> void:
+	# Esperar un frame para el cálculo de posiciones globales
+	await get_tree().process_frame
+	
 	tournament = screen_data.tournament if screen_data.tournament != null else Tournament.new(true)
 	screen_data.tournament = tournament
 
@@ -29,7 +31,6 @@ func _ready() -> void:
 
 	refresh_brackets()
 	show_winner_if_complete()
-	update_flags_visibility()
 
 func _process(_delta: float) -> void:
 	if KeyUtils.is_action_just_pressed(Player.ControlScheme.P1, KeyUtils.Action.SHOOT):
@@ -38,123 +39,144 @@ func _process(_delta: float) -> void:
 			if stage_matches.size() > 0:
 				GameManager.current_match = stage_matches[0]
 				transition_screen(SoccerGame.ScreenType.IN_GAME, screen_data)
-			else:
-				transition_screen(SoccerGame.ScreenType.MAIN_MENU)
-			SoundPlayer.play(SoundPlayer.Sound.UI_SELECT)
+		else:
+			transition_screen(SoccerGame.ScreenType.MAIN_MENU)
+		SoundPlayer.play(SoundPlayer.Sound.UI_SELECT)
 
 # -----------------------
-# 🔹 Brackets
+# 🔹 Lógica de Brackets
 # -----------------------
 func refresh_brackets() -> void:
 	for stage in Tournament.Stage.values():
 		refresh_bracket_stage(stage)
 
 func refresh_bracket_stage(stage: Tournament.Stage) -> void:
-	var flag_nodes: Array[BracketFlag] = get_flag_nodes_for_stage(stage)
-	var matches = tournament.matches.get(stage, [])
+	var flag_nodes := get_flag_nodes_for_stage(stage)
+	
+	if stage == tournament.current_stage:
+		stage_texture.texture = STAGE_TEXTURES.get(stage)
 
-	for node in flag_nodes:
-		node.visible = true
-		node.texture = null
-		node.border.visible = false
-		node.score_label.visible = false
-		node.modulate = Color(1, 1, 1, 1)
+	if stage < Tournament.Stage.COMPLETE:
+		var matches : Array = tournament.matches.get(stage, [])
+		
+		# --- CASO A: Placeholders ---
+		if matches.is_empty():
+			for node in flag_nodes:
+				if node is BracketFlag:
+					_setup_flag_visuals(node, "", true) 
+			return
 
-	if matches.is_empty():
+		# --- CASO B: Partidos ---
+		for i in range(matches.size()):
+			var idx_home = 2 * i
+			var idx_away = 2 * i + 1
+			
+			if idx_away >= flag_nodes.size(): break 
+
+			var current_match : Match = matches[i]
+			var flag_home : BracketFlag = flag_nodes[idx_home]
+			var flag_away : BracketFlag = flag_nodes[idx_away]
+
+			_setup_flag_visuals(flag_home, current_match.country_home, false)
+			_setup_flag_visuals(flag_away, current_match.country_away, false)
+
+			if not current_match.winner.is_empty():
+				# Partido Terminado
+				var flag_winner := flag_home if current_match.winner == current_match.country_home else flag_away
+				var flag_loser := flag_home if flag_winner == flag_away else flag_away
+				var score = current_match.final_score if current_match.final_score != "" else "🏆"
+				
+				flag_winner.set_as_winner(score)
+				flag_loser.set_as_loser(stage)
+				
+				# En match terminado, borde solo para el ganador si es humano
+				flag_winner.border.visible = current_match.winner in GameManager.player_setup
+			else:
+				# Partido Pendiente (Aquí arreglamos los bordes de P1 y P2)
+				flag_home.border.visible = false
+				flag_away.border.visible = false
+				
+				# Revisamos al equipo HOME
+				if current_match.country_home in GameManager.player_setup:
+					flag_home.set_as_current_team()
+				
+				# Revisamos al equipo AWAY (Independiente, para que ambos puedan tener borde)
+				if current_match.country_away in GameManager.player_setup:
+					flag_away.set_as_current_team()
+				
+				if flag_home.border.visible or flag_away.border.visible:
+					GameManager.current_match = current_match
+	else:
+		# --- CASO C: Winner (El cuadro del medio abajo) ---
+		if flag_nodes.size() > 0:
+			# Si no hay ganador todavía, le decimos que es placeholder (true)
+			var is_empty = tournament.winner.is_empty()
+			_setup_flag_visuals(flag_nodes[0], tournament.winner, is_empty)
+
+# Helper visual
+func _setup_flag_visuals(node: BracketFlag, country_name: String, is_placeholder: bool) -> void:
+	node.visible = true 
+	node.border.visible = false
+	node.score_label.visible = false
+	
+	# --- CASO 1: Placeholders (Cuadros vacíos o futuros) ---
+	if is_placeholder:
+		var p = FlagHelper.get_texture("placeholder")
+		if p != null:
+			node.texture = p
+			node.modulate = Color(1, 1, 1, 0.5) # Semitransparente
+		else:
+			# Si no hay imagen placeholder, lo hacemos invisible
+			node.texture = null
+			node.modulate = Color(0, 0, 0, 0) 
 		return
 
-	var player1 := GameManager.player_setup[0]
-	var player2 := GameManager.player_setup[1] if GameManager.player_setup.size() > 1 else ""
-
-	for i in range(matches.size()):
-		var match: Match = matches[i]
-		var idx_home = i * 2
-		var idx_away = i * 2 + 1
-		if idx_home >= flag_nodes.size() or idx_away >= flag_nodes.size():
-			continue
-
-		var flag_home: BracketFlag = flag_nodes[idx_home]
-		var flag_away: BracketFlag = flag_nodes[idx_away]
-
-		flag_home.texture = FlagHelper.get_texture(match.country_home)
-		flag_away.texture = FlagHelper.get_texture(match.country_away)
-		flag_home.visible = true
-		flag_away.visible = true
-
-		if not match.winner.is_empty():
-			var flag_winner = flag_home if match.winner == match.country_home else flag_away
-			var flag_loser = flag_away if flag_winner == flag_home else flag_home
-			var score = match.final_score if match.final_score != "" else "🏆"
-
-			flag_winner.set_as_winner(score)
-			flag_loser.set_as_loser(stage)
-
-			flag_winner.border.visible = (match.winner == player1 or match.winner == player2) and stage != Tournament.Stage.COMPLETE
-			flag_loser.score_label.visible = not ([match.country_home, match.country_away].has(player1) or [match.country_home, match.country_away].has(player2))
-		else:
-			if [match.country_home, match.country_away].has(player1) or [match.country_home, match.country_away].has(player2):
-				var flag_player = flag_home if match.country_home in [player1, player2] else flag_away
-				flag_player.set_as_current_team()
-				GameManager.current_match = match
-
-	for node in flag_nodes:
-		if node.texture == null:
-			node.modulate = Color(0.4, 0.4, 0.4, 1)
-
-	if stage <= tournament.current_stage:
-		_update_stage_texture(stage)
-
-# -----------------------
-# 🔹 Flags visibility
-# -----------------------
-func update_flags_visibility() -> void:
-	for stage in Tournament.Stage.values():
-		if not flag_containers.has(stage):
-			continue
-		for container in flag_containers[stage]:
-			for child in container.get_children():
-				if child is BracketFlag:
-					child.visible = true
-					if GameManager.current_match != null and not tournament.is_custom:
-						child.border.visible = child.texture in [
-							FlagHelper.get_texture(GameManager.current_match.country_home),
-							FlagHelper.get_texture(GameManager.current_match.country_away)
-						]
-					else:
-						child.border.visible = false
-					child.score_label.visible = stage < tournament.current_stage and child.modulate.v > 0.6
+	# --- CASO 2: Equipos Reales ---
+	var tex = FlagHelper.get_texture(country_name)
+	
+	if tex != null:
+		node.texture = tex
+		node.modulate = Color.WHITE
+	else:
+		# Fallback si falta imagen (Error)
+		print("⚠️ TEXTURA FALTANTE para: ", country_name)
+		# Ponemos el placeholder para que no se vea morado
+		node.texture = FlagHelper.get_texture("placeholder")
+		node.modulate = Color(1, 1, 1, 1) 
 
 func show_winner_if_complete() -> void:
-	if tournament.winner.is_empty():
-		return
+	if tournament.winner.is_empty(): return
 	tournament.current_stage = Tournament.Stage.COMPLETE
 	stage_texture.texture = STAGE_TEXTURES[Tournament.Stage.COMPLETE]
-
 	var winner_nodes = get_flag_nodes_for_stage(Tournament.Stage.COMPLETE)
 	if winner_nodes.size() > 0:
-		var winner_flag: BracketFlag = winner_nodes[0]
-		winner_flag.visible = true
-		winner_flag.texture = FlagHelper.get_texture(tournament.winner)
-
+		_setup_flag_visuals(winner_nodes[0], tournament.winner, false)
 		var finals_matches = tournament.matches.get(Tournament.Stage.FINALS, [])
 		var final_score = finals_matches[0].final_score if finals_matches.size() > 0 else "🏆"
-		winner_flag.set_as_winner(final_score, true)
+		winner_nodes[0].set_as_winner(final_score, true)
 
 func get_flag_nodes_for_stage(stage: Tournament.Stage) -> Array[BracketFlag]:
-	var nodes: Array[BracketFlag] = []
-	if flag_containers.has(stage):
-		for container in flag_containers[stage]:
-			if container == null:
-				continue
-			for node in container.get_children():
-				if node is BracketFlag:
-					nodes.append(node)
-	nodes.sort_custom(func(a, b): return a.position.y < b.position.y)
-	return nodes
+	var final_ordered_nodes: Array[BracketFlag] = []
+	if not flag_containers.has(stage):
+		return final_ordered_nodes
+
+	var containers = flag_containers[stage]
+	
+	for container in containers:
+		if container == null: continue
+		
+		var side_nodes: Array[BracketFlag] = []
+		for node in container.get_children():
+			if node is BracketFlag:
+				side_nodes.append(node)
+		
+		side_nodes.sort_custom(func(a, b): return a.global_position.y < b.global_position.y)
+		final_ordered_nodes.append_array(side_nodes)
+	
+	return final_ordered_nodes
 
 func _update_stage_texture(stage: Tournament.Stage = Tournament.Stage.QUARTER_FINALS) -> void:
-	if stage == null:
-		stage = tournament.current_stage
+	if stage == null: stage = tournament.current_stage
 	if STAGE_TEXTURES.has(stage):
 		stage_texture.texture = STAGE_TEXTURES[stage]
 		stage_texture.visible = true
