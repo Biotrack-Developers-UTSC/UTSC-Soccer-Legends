@@ -2,13 +2,23 @@ class_name PlayerStateMoving
 extends PlayerState
 
 func _process(_delta: float) -> void:
-	if player.control_scheme == Player.ControlScheme.CPU:
+	# 1. CASO CPU ACTIVA (Juega normal)
+	if player.control_scheme == Player.ControlScheme.CPU and not player.is_dummy:
 		ai_behavior.process_ai()
+
+	# 2. CASO CPU DUMMY (Se queda quieto)
+	elif player.control_scheme == Player.ControlScheme.CPU and player.is_dummy:
+		player.velocity = Vector2.ZERO # Forzamos velocidad cero
+		# IMPORTANTE: No llamamos a handle_human_movement() aquí
+		# porque el CPU no tiene teclas asignadas y causaría el crash.
+
+	# 3. CASO HUMANO (P1 o P2)
 	else:
 		handle_human_movement()
+
+	# Animaciones y dirección
 	player.set_movement_animation()
 	player.set_heading()
-
 
 func handle_human_movement() -> void:
 	var direction := KeyUtils.get_input_vector(player.control_scheme)

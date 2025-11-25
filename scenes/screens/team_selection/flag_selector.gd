@@ -8,14 +8,18 @@ signal selected
 @onready var indicator_2p: TextureRect = %Indicator2P
 @onready var indicator_cpu: TextureRect = %IndicatorCPU
 
+# Utilizamos la variable pública SIN GET/SET, ya que esta es la versión que funciona
+# con TeamSelectionScreen (antes de AboutScreen)
 var control_scheme: Player.ControlScheme = Player.ControlScheme.P1
 var is_selected: bool = false
-var is_cpu: bool = false # 👈 Nuevo estado para CPU
+var is_cpu: bool = false 
 
 func _ready() -> void:
+	# Llama a la función que actualiza la visibilidad de P1/P2/CPU
 	update_indicators()
 
 func update_indicators() -> void:
+	# Usa la variable pública
 	if indicator_1p:
 		indicator_1p.visible = not is_cpu and control_scheme == Player.ControlScheme.P1
 	if indicator_2p:

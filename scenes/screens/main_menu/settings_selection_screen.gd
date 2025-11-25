@@ -7,7 +7,7 @@ const BUTTON_SELECTOR_PREFAB := preload("res://scenes/screens/main_menu/button_s
 
 @onready var options_container: Control = %OptionsContainer
 
-var options: Array[String] = ["PLAY", "CONTROLS", "ABOUT", "MENU"]
+var options: Array[String] = ["PLAY", "CONTROLS", "ABOUT", "MENU"] # Opciones
 
 var selection: Array[Vector2i] = [Vector2i.ZERO, Vector2i.ZERO] # selección de P1 y P2
 var selectors: Array[FlagSelector] = []                         # selectores visibles
@@ -95,8 +95,8 @@ func handle_selection(index: int) -> void:
 		0:
 			transition_screen(SoccerGame.ScreenType.GAME_MODE_SELECTION)
 		1:
-			transition_screen(SoccerGame.ScreenType.MAIN_MENU)
+			transition_screen(SoccerGame.ScreenType.CONTROLS)
 		2:
-			transition_screen(SoccerGame.ScreenType.MAIN_MENU)
+			transition_screen(SoccerGame.ScreenType.ABOUT) 
 		3:
 			transition_screen(SoccerGame.ScreenType.MAIN_MENU)

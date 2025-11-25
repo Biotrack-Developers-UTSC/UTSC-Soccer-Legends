@@ -101,6 +101,7 @@ tracks/0/keys = {
 [sub_resource type="Animation" id="Animation_2l4js"]
 resource_name = "chest_control"
 length = 0.1
+loop_mode = 1
 step = 0.1
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -118,6 +119,7 @@ tracks/0/keys = {
 [sub_resource type="Animation" id="Animation_k4v7y"]
 resource_name = "dive_down"
 length = 0.1
+loop_mode = 1
 step = 0.1
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -135,6 +137,7 @@ tracks/0/keys = {
 [sub_resource type="Animation" id="Animation_xrqxk"]
 resource_name = "dive_up"
 length = 0.1
+loop_mode = 1
 step = 0.1
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -238,6 +241,7 @@ tracks/1/keys = {
 [sub_resource type="Animation" id="Animation_rpnd8"]
 resource_name = "mourn"
 length = 0.1
+loop_mode = 1
 step = 0.1
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -255,6 +259,7 @@ tracks/0/keys = {
 [sub_resource type="Animation" id="Animation_kqtwu"]
 resource_name = "prep_kick"
 length = 0.1
+loop_mode = 1
 step = 0.1
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -272,6 +277,7 @@ tracks/0/keys = {
 [sub_resource type="Animation" id="Animation_atpat"]
 resource_name = "recover"
 length = 0.1
+loop_mode = 1
 step = 0.1
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -307,6 +313,7 @@ tracks/0/keys = {
 [sub_resource type="Animation" id="Animation_dyp2m"]
 resource_name = "tackle"
 length = 0.1
+loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -355,6 +362,7 @@ tracks/1/keys = {
 [sub_resource type="Animation" id="Animation_jk2m4"]
 resource_name = "walk"
 length = 0.9
+loop_mode = 1
 step = 0.15
 tracks/0/type = "value"
 tracks/0/imported = false

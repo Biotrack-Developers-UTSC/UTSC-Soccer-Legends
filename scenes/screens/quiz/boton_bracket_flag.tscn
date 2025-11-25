@@ -1,8 +1,7 @@
-[gd_scene load_steps=4 format=3 uid="uid://ch0c8fii5d7tg"]
+[gd_scene load_steps=3 format=3 uid="uid://ch0c8fii5d7tg"]
 
 [ext_resource type="Texture2D" uid="uid://2d6i1bgrxf8i" path="res://assets/art/ui/flags/flag-placeholder.png" id="1_nfdkt"]
 [ext_resource type="Script" uid="uid://bdosy7j2t4vos" path="res://scenes/screens/quiz/boton_bracket_flag.gd" id="2_fps4g"]
-[ext_resource type="Texture2D" uid="uid://bkhjl2k11y6sx" path="res://assets/art/ui/flags/flag-selection.png" id="3_fps4g"]
 
 [node name="BotonBracketFlag" type="TextureRect"]
 custom_minimum_size = Vector2(32, 22)
@@ -12,12 +11,42 @@ texture = ExtResource("1_nfdkt")
 script = ExtResource("2_fps4g")
 metadata/_custom_type_script = "uid://b1tn8is6a65bb"
 
+[node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 2.0
+offset_top = 2.0
+offset_right = -2.0
+offset_bottom = -2.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.501961)
+
+[node name="IconRect" type="TextureRect" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -10.0
+offset_top = -10.0
+offset_right = 10.0
+offset_bottom = 10.0
+grow_horizontal = 2
+grow_vertical = 2
+expand_mode = 1
+
 [node name="BotonLabel" type="Label" parent="."]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_top = 10.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
@@ -28,8 +57,8 @@ text = "SALIR"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="BotonBorderTexture" type="TextureRect" parent="."]
-visible = false
+[node name="ActionLabel" type="Label" parent="."]
+unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -40,5 +69,10 @@ offset_right = 2.0
 offset_bottom = 2.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("3_fps4g")
-expand_mode = 1
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/outline_size = 2
+theme_override_font_sizes/font_size = 4
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3

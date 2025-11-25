@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://brbjiedqn6v7f"
-path="res://.godot/imported/wrong_simbol.png-4d8855458d816dcbbbd1766094d499ee.ctex"
+uid="uid://cr3vchup2fgaa"
+path="res://.godot/imported/quiz_background2.png-8fb2eb4cc3c8617e6f72c5025747939d.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/art/ui/quiz/wrong_simbol.png"
-dest_files=["res://.godot/imported/wrong_simbol.png-4d8855458d816dcbbbd1766094d499ee.ctex"]
+source_file="res://assets/art/backgrounds/quiz_background2.png"
+dest_files=["res://.godot/imported/quiz_background2.png-8fb2eb4cc3c8617e6f72c5025747939d.ctex"]
 
 [params]
 

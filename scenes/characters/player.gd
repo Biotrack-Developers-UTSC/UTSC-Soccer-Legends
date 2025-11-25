@@ -51,8 +51,19 @@ var skin_color := Player.SkinColor.MEDIUM
 var spawn_position := Vector2.ZERO
 var state_factory := PlayerStateFactory.new()
 var weight_on_duty_steering := 0.0
+# --- NUEVA VARIABLE ---
+var is_dummy : bool = false
+# ----------------------
 
 func _ready() -> void:
+	# --- CAMBIO IMPORTANTE: MODO UI ---
+	if is_dummy:
+		# Si es dummy, solo configuramos lo visual (colores) y salimos.
+		set_shader_properties()
+		control_sprite.visible = false 
+		return 
+	# ----------------------------------
+
 	set_control_texture()
 	setup_ai_behavior()
 	set_shader_properties()
@@ -63,10 +74,21 @@ func _ready() -> void:
 	spawn_position = position
 	GameEvents.team_scored.connect(on_team_scored.bind())
 	GameEvents.game_over.connect(on_game_over.bind())
-	var initial_position := kickoff_position if country == GameManager.current_match.country_home else spawn_position
+
+	var initial_position := spawn_position
+	if GameManager.current_match != null:
+		if country == GameManager.current_match.country_home:
+			initial_position = kickoff_position
+	
 	switch_state(State.RESETTING, PlayerStateData.build().set_reset_position(initial_position))
 
 func _process(delta: float) -> void:
+	# --- CAMBIO IMPORTANTE ---
+	# Si es dummy, no procesamos gravedad ni movimiento.
+	if is_dummy:
+		return
+	# -------------------------
+
 	flip_sprites()
 	set_sprite_visibility()
 	process_gravity(delta)
@@ -75,7 +97,10 @@ func _process(delta: float) -> void:
 func set_shader_properties() -> void:
 	player_sprite.material.set_shader_parameter("skin_color", skin_color)
 	var countries := DataLoader.get_countries()
+	if countries.is_empty(): return 
+	
 	var country_color := countries.find(country)
+	if country_color == -1: country_color = 0
 	country_color = clampi(country_color, 0, countries.size() - 1)
 	player_sprite.material.set_shader_parameter("team_color", country_color)
 

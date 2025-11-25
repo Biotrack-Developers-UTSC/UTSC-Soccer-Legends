@@ -10,13 +10,15 @@ func _init() -> void:
 		SoccerGame.ScreenType.IN_GAME: preload("res://scenes/screens/world/world_screen.tscn"),
 		SoccerGame.ScreenType.GAME_MODE_SELECTION: preload("res://scenes/screens/main_menu/game_mode_selection_screen.tscn"),
 		SoccerGame.ScreenType.OPTIONS_SELECTION: preload("res://scenes/screens/main_menu/settings_selection_screen.tscn"),
-		#SoccerGame.ScreenType.CONTROLS: preload("res://scenes/screens/main_menu/controls_screen.tscn"),
-		#SoccerGame.ScreenType.ABOUT: preload("res://scenes/screens/main_menu/about_screen.tscn"),
+		SoccerGame.ScreenType.CONTROLS: preload("res://scenes/screens/main_menu/controls_screen.tscn"), 
+		SoccerGame.ScreenType.ABOUT: preload("res://scenes/screens/main_menu/about_screen.tscn"),
 		SoccerGame.ScreenType.CUSTOM_MATCH: preload("res://scenes/screens/custom_match/custom_match_screen.tscn"),
 		SoccerGame.ScreenType.ANIMALS_QUIZ: preload("res://scenes/screens/quiz/animals_quiz_screen.tscn"),
 		SoccerGame.ScreenType.SOCCER_QUIZ: preload("res://scenes/screens/quiz/soccer_quiz_screen.tscn")
 	}
 
 func get_fresh_screen(screen: SoccerGame.ScreenType) -> Screen:
-	assert(screens.has(screen), "screen doesn't exist!")
+	if not screens.has(screen):
+		push_error("ScreenFactory: La pantalla solicitada no existe en el diccionario: " + str(screen))
+		return null
 	return screens.get(screen).instantiate()
