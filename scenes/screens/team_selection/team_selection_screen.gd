@@ -126,6 +126,8 @@ func on_selector_selected() -> void:
 	
 	var is_p2_cpu_opponent = selectors.size() > 1 and selectors[1].is_cpu
 	
+	GameManager.is_p2_cpu = is_p2_cpu_opponent # Establece si el P2 es CPU
+	
 	match mode:
 		"animals_quiz", "soccer_quiz":
 			_start_quiz_mode(mode, is_p2_cpu_opponent)
@@ -179,6 +181,7 @@ func _create_cpu_selector_for_custom_match() -> void:
 	GameManager.player_setup[1] = DataLoader.get_countries()[1] 
 
 func _handle_single_player_tournament_start() -> void:
+	GameManager.is_p2_cpu = true
 	var p1 = GameManager.player_setup[0]
 	var safe_countries = _get_safe_country_list()
 	if safe_countries.has(p1): safe_countries.erase(p1)
@@ -190,6 +193,7 @@ func _handle_single_player_tournament_start() -> void:
 	_start_tournament(tournament_countries)
 
 func _handle_multiplayer_tournament_start(p1: String, p2: String) -> void:
+	GameManager.is_p2_cpu = false
 	var safe_countries = _get_safe_country_list()
 	if safe_countries.has(p1): safe_countries.erase(p1)
 	if safe_countries.has(p2): safe_countries.erase(p2)

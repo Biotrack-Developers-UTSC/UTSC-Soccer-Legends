@@ -1,14 +1,24 @@
-[gd_scene load_steps=5 format=3 uid="uid://da28itlolupug"]
+[gd_scene load_steps=8 format=3 uid="uid://da28itlolupug"]
 
 [ext_resource type="Script" uid="uid://b14fi0toipgbv" path="res://scenes/screens/main_menu/about_screen.gd" id="1_hd3j7"]
 [ext_resource type="Texture2D" uid="uid://ly2y21gp5ui" path="res://assets/art/ui/teamselection/team-selection-background.png" id="1_uuvs4"]
 [ext_resource type="Texture2D" uid="uid://dy25y75h0ccib" path="res://assets/art/ui/mainmenu/about_title.png" id="2_uuvs4"]
 [ext_resource type="PackedScene" uid="uid://b8gvy2oqepqox" path="res://scenes/screens/quiz/seleccion_botones_bracket_flag.tscn" id="3_886l6"]
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_hd3j7"]
+size = Vector2(70, 50)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_jfdxc"]
+size = Vector2(70, 50)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_0ybo1"]
+size = Vector2(70, 50)
+
 [node name="AboutScreen" type="Node"]
 script = ExtResource("1_hd3j7")
 
 [node name="Background" type="TextureRect" parent="."]
+unique_name_in_owner = true
 offset_right = 40.0
 offset_bottom = 40.0
 texture = ExtResource("1_uuvs4")
@@ -48,26 +58,48 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="SeleccionBotonesBracketFlag" parent="Background/AboutContainer" instance=ExtResource("3_886l6")]
+[node name="SeleccionBotonesBracketFlagArea2D" type="Area2D" parent="Background"]
+unique_name_in_owner = true
+
+[node name="SeleccionBotonesBracketFlag" parent="Background/SeleccionBotonesBracketFlagArea2D" instance=ExtResource("3_886l6")]
 custom_minimum_size = Vector2(50, 45)
-layout_mode = 0
 offset_left = 30.0
 offset_top = 120.0
 offset_right = 100.0
 offset_bottom = 170.0
 
-[node name="SeleccionBotonesBracketFlag2" parent="Background/AboutContainer" instance=ExtResource("3_886l6")]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Background/SeleccionBotonesBracketFlagArea2D"]
+position = Vector2(65, 145)
+shape = SubResource("RectangleShape2D_hd3j7")
+
+[node name="SeleccionBotonesBracketFlag2Area2D" type="Area2D" parent="Background"]
+unique_name_in_owner = true
+
+[node name="SeleccionBotonesBracketFlag2" parent="Background/SeleccionBotonesBracketFlag2Area2D" instance=ExtResource("3_886l6")]
 custom_minimum_size = Vector2(50, 45)
-layout_mode = 0
 offset_left = 110.0
 offset_top = 120.0
 offset_right = 180.0
 offset_bottom = 170.0
 
-[node name="SeleccionBotonesBracketFlag3" parent="Background/AboutContainer" instance=ExtResource("3_886l6")]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Background/SeleccionBotonesBracketFlag2Area2D"]
+position = Vector2(145, 145)
+shape = SubResource("RectangleShape2D_jfdxc")
+
+[node name="SeleccionBotonesBracketFlag3Area2D" type="Area2D" parent="Background"]
+unique_name_in_owner = true
+
+[node name="SeleccionBotonesBracketFlag3" parent="Background/SeleccionBotonesBracketFlag3Area2D" instance=ExtResource("3_886l6")]
 custom_minimum_size = Vector2(50, 45)
-layout_mode = 0
 offset_left = 190.0
 offset_top = 120.0
 offset_right = 260.0
 offset_bottom = 170.0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Background/SeleccionBotonesBracketFlag3Area2D"]
+position = Vector2(225, 145)
+shape = SubResource("RectangleShape2D_0ybo1")
+
+[connection signal="input_event" from="Background/SeleccionBotonesBracketFlagArea2D" to="." method="_on_seleccion_botones_bracket_flag_area_2d_input_event"]
+[connection signal="input_event" from="Background/SeleccionBotonesBracketFlag2Area2D" to="." method="_on_seleccion_botones_bracket_flag_2_area_2d_input_event"]
+[connection signal="input_event" from="Background/SeleccionBotonesBracketFlag3Area2D" to="." method="_on_seleccion_botones_bracket_flag_3_area_2d_input_event"]

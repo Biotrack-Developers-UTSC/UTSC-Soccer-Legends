@@ -1,14 +1,18 @@
-[gd_scene load_steps=5 format=3 uid="uid://brr40lhav6sn4"]
+[gd_scene load_steps=6 format=3 uid="uid://brr40lhav6sn4"]
 
 [ext_resource type="Texture2D" uid="uid://ly2y21gp5ui" path="res://assets/art/ui/teamselection/team-selection-background.png" id="1_7bay2"]
 [ext_resource type="Script" uid="uid://bnlgsumlqkb5u" path="res://scenes/screens/main_menu/game_mode_selection_screen.gd" id="1_gv4ri"]
 [ext_resource type="Texture2D" uid="uid://8gitk7hf4hy4" path="res://assets/art/ui/game_mode_selection/select_game_mode.png" id="2_gv4ri"]
 [ext_resource type="PackedScene" uid="uid://b8gvy2oqepqox" path="res://scenes/screens/quiz/seleccion_botones_bracket_flag.tscn" id="4_htpnb"]
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_rcvui"]
+size = Vector2(70, 50)
+
 [node name="GameModeSelectionScreen" type="Node"]
 script = ExtResource("1_gv4ri")
 
 [node name="Background" type="TextureRect" parent="."]
+unique_name_in_owner = true
 offset_right = 40.0
 offset_bottom = 40.0
 texture = ExtResource("1_7bay2")
@@ -35,37 +39,73 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="SeleccionBotonesBracketFlag" parent="Background/GameModesContainer" instance=ExtResource("4_htpnb")]
-layout_mode = 0
+[node name="SeleccionBotonesBracketFlagArea2D" type="Area2D" parent="Background"]
+unique_name_in_owner = true
+
+[node name="SeleccionBotonesBracketFlag" parent="Background/SeleccionBotonesBracketFlagArea2D" instance=ExtResource("4_htpnb")]
 offset_left = 7.0
 offset_top = 30.0
 offset_right = 77.0
 offset_bottom = 80.0
 
-[node name="SeleccionBotonesBracketFlag2" parent="Background/GameModesContainer" instance=ExtResource("4_htpnb")]
-layout_mode = 0
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Background/SeleccionBotonesBracketFlagArea2D"]
+position = Vector2(42, 55)
+shape = SubResource("RectangleShape2D_rcvui")
+
+[node name="SeleccionBotonesBracketFlag2Area2D" type="Area2D" parent="Background"]
+unique_name_in_owner = true
+
+[node name="SeleccionBotonesBracketFlag2" parent="Background/SeleccionBotonesBracketFlag2Area2D" instance=ExtResource("4_htpnb")]
 offset_left = 50.0
 offset_top = 80.0
 offset_right = 120.0
 offset_bottom = 130.0
 
-[node name="SeleccionBotonesBracketFlag3" parent="Background/GameModesContainer" instance=ExtResource("4_htpnb")]
-layout_mode = 0
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Background/SeleccionBotonesBracketFlag2Area2D"]
+position = Vector2(85, 105)
+shape = SubResource("RectangleShape2D_rcvui")
+
+[node name="SeleccionBotonesBracketFlag3Area2D" type="Area2D" parent="Background"]
+unique_name_in_owner = true
+
+[node name="SeleccionBotonesBracketFlag3" parent="Background/SeleccionBotonesBracketFlag3Area2D" instance=ExtResource("4_htpnb")]
 offset_left = 105.0
 offset_top = 130.0
 offset_right = 175.0
 offset_bottom = 180.0
 
-[node name="SeleccionBotonesBracketFlag4" parent="Background/GameModesContainer" instance=ExtResource("4_htpnb")]
-layout_mode = 0
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Background/SeleccionBotonesBracketFlag3Area2D"]
+position = Vector2(140, 155)
+shape = SubResource("RectangleShape2D_rcvui")
+
+[node name="SeleccionBotonesBracketFlag4Area2D" type="Area2D" parent="Background"]
+unique_name_in_owner = true
+
+[node name="SeleccionBotonesBracketFlag4" parent="Background/SeleccionBotonesBracketFlag4Area2D" instance=ExtResource("4_htpnb")]
 offset_left = 160.0
 offset_top = 80.0
 offset_right = 230.0
 offset_bottom = 130.0
 
-[node name="SeleccionBotonesBracketFlag5" parent="Background/GameModesContainer" instance=ExtResource("4_htpnb")]
-layout_mode = 0
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Background/SeleccionBotonesBracketFlag4Area2D"]
+position = Vector2(195, 105)
+shape = SubResource("RectangleShape2D_rcvui")
+
+[node name="SeleccionBotonesBracketFlag5Area2D" type="Area2D" parent="Background"]
+unique_name_in_owner = true
+
+[node name="SeleccionBotonesBracketFlag5" parent="Background/SeleccionBotonesBracketFlag5Area2D" instance=ExtResource("4_htpnb")]
 offset_left = 206.0
 offset_top = 30.0
 offset_right = 276.0
 offset_bottom = 80.0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Background/SeleccionBotonesBracketFlag5Area2D"]
+position = Vector2(241, 55)
+shape = SubResource("RectangleShape2D_rcvui")
+
+[connection signal="input_event" from="Background/SeleccionBotonesBracketFlagArea2D" to="." method="_on_seleccion_botones_bracket_flag_area_2d_input_event"]
+[connection signal="input_event" from="Background/SeleccionBotonesBracketFlag2Area2D" to="." method="_on_seleccion_botones_bracket_flag_2_area_2d_input_event"]
+[connection signal="input_event" from="Background/SeleccionBotonesBracketFlag3Area2D" to="." method="_on_seleccion_botones_bracket_flag_3_area_2d_input_event"]
+[connection signal="input_event" from="Background/SeleccionBotonesBracketFlag4Area2D" to="." method="_on_seleccion_botones_bracket_flag_4_area_2d_input_event"]
+[connection signal="input_event" from="Background/SeleccionBotonesBracketFlag5Area2D" to="." method="_on_seleccion_botones_bracket_flag_5_area_2d_input_event"]

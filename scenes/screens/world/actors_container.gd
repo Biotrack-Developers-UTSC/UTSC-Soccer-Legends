@@ -93,15 +93,21 @@ func check_for_kickoff_readiness() -> void:
 	
 func setup_control_schemes() -> void:
 	reset_control_schemes()
+	# 🌟 CORRECCIÓN: Declarar e inicializar p1_country aquí
 	var p1_country := GameManager.player_setup[0]
+	print("Modo de Juego Detectado:")
 	if GameManager.is_coop():
+		print("  -> COOP")
 		var player_squad := squad_home if squad_home[0].country == p1_country else squad_away
 		player_squad[4].set_control_scheme(Player.ControlScheme.P1)
 		player_squad[5].set_control_scheme(Player.ControlScheme.P2)
 	elif GameManager.is_single_player():
+		# ✅ ESTA RAMA AHORA FUNCIONA CORRECTAMENTE
+		print("  -> SINGLE PLAYER (1P vs CPU)")
 		var player_squad := squad_home if squad_home[0].country == p1_country else squad_away
 		player_squad[5].set_control_scheme(Player.ControlScheme.P1)
-	else: # versus
+	else: # versus (P1 vs P2 Humano)
+		print("  -> VERSUS (P1 vs P2)")
 		var p1_squad := squad_home if squad_home[0].country == p1_country else squad_away
 		var p2_squad := squad_home if p1_squad == squad_away else squad_away
 		p1_squad[5].set_control_scheme(Player.ControlScheme.P1)

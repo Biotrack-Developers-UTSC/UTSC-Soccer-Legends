@@ -24,7 +24,11 @@ const TEXTURE_HEART_EMPTY = preload("res://assets/art/ui/quiz/heart_empty.tres")
 	%Heart3
 ]
 
-# --- BANCOS DE PREGUNTAS ---
+# 🌟 NUEVOS ELEMENTOS PARA CONTROLES MÓVILES
+const MOBILE_CONTROLS_PREFAB := preload("res://scenes/ui/mobile_controls.tscn")
+var mobile_controls_instance: CanvasLayer = null
+
+# --- BANCOS DE PREGUNTAS (Sin cambios) ---
 const QUESTIONS_ANIMALS : Array[Dictionary] = [
 	{ "text": "¿Cuál es el animal terrestre más rápido?", "options": ["Guepardo", "León", "Elefante", "Tortuga"], "correct": 0 },
 	{ "text": "¿Qué tecnología usa BioTrack?", "options": ["Microondas", "IoT y GPS", "Solo Bluetooth", "Rayos X"], "correct": 1 },
@@ -70,11 +74,22 @@ var spawn_positions : Array[Vector2] = []
 var lives : int = 3
 var current_correct_goal_index : int = -1
 
+# 🌟 FUNCIÓN HELPER PARA DETECTAR ENTORNO TÁCTIL
+func is_touch_environment() -> bool:
+	var os_name := OS.get_name()
+	# Verifica si estamos en Android, iOS, o en Web
+	return os_name == "Android" or os_name == "iOS" or os_name == "Web"
+
 func _ready() -> void:
 	randomize()
 	
 	spawn_positions.append(players[0].position)
 	if players.size() > 1: spawn_positions.append(players[1].position)
+	
+	# 🎯 INSTANCIAR Y AÑADIR CONTROLES MÓVILES
+	if is_touch_environment():
+		mobile_controls_instance = MOBILE_CONTROLS_PREFAB.instantiate()
+		add_child(mobile_controls_instance)
 	
 	ball.z_index = 10 
 	for p in players:
@@ -88,6 +103,18 @@ func _ready() -> void:
 	update_hearts_display()
 	
 	start_round()
+
+# --------------------------------------------------------
+# 🎯 FUNCIÓN DE LIMPIEZA CENTRALIZADA
+# --------------------------------------------------------
+func _clean_up_and_transition(target_screen: SoccerGame.ScreenType) -> void:
+	# Elimina los controles móviles si existen
+	if mobile_controls_instance:
+		mobile_controls_instance.queue_free()
+		mobile_controls_instance = null
+		
+	transition_screen(target_screen)
+# --------------------------------------------------------
 
 func select_theme_mode() -> void:
 	var pool = QUESTIONS_ANIMALS.duplicate()
@@ -260,7 +287,7 @@ func handle_incorrect_answer() -> void:
 			label_question.modulate = Color(1, 0, 0)
 		
 		get_tree().create_timer(3.0).timeout.connect(func():
-			transition_screen(SoccerGame.ScreenType.MAIN_MENU)
+			_clean_up_and_transition(SoccerGame.ScreenType.MAIN_MENU) # 🎯 LLAMAR LIMPIEZA
 		)
 		
 	else:
@@ -300,5 +327,5 @@ func finish_quiz() -> void:
 		label_question.modulate = Color(1, 0.84, 0)
 
 	get_tree().create_timer(4.0).timeout.connect(func():
-		transition_screen(SoccerGame.ScreenType.MAIN_MENU)
+		_clean_up_and_transition(SoccerGame.ScreenType.MAIN_MENU) # 🎯 LLAMAR LIMPIEZA
 	)

@@ -40,6 +40,9 @@ const OTHER_KEY_MAP: Dictionary = {
 @onready var right_container: VBoxContainer = %RightOptionsContainer2
 @onready var far_right_container: VBoxContainer = %FarRightOptionsContainer3
 @onready var back_button_container: VBoxContainer = %BackContainer
+
+# 💡 REFERENCIA DEL BOTÓN DE REGRESO (SeleccionBotonesBracketFlag)
+@onready var back_button_node: Control = %BackContainer.get_child(0) 
 # ---------------------------------------
 
 # Mapa simplificado de acciones para las 4 columnas (8 slots)
@@ -69,10 +72,14 @@ func _ready() -> void:
 	containers_map = [far_left_container, left_container, right_container, far_right_container]
 	
 	setup_control_buttons()
-	# LÓGICA CORREGIDA: Llama a la nueva función de configuración de selectores
 	setup_selectors()
-	# El botón de regreso se configura en la función setup_selectors
-	# setup_back_button() ya no es necesario para el selector
+	
+	# 🎯 CONFIGURACIÓN DEL BOTÓN DE REGRESO PARA EL CLIC/TOQUE
+	# 1. Asegúrate de que el nodo pueda recibir input
+	back_button_node.mouse_filter = Control.MOUSE_FILTER_STOP 
+	
+	# 2. Conecta la señal de input GUI (clic/toque)
+	back_button_node.gui_input.connect(_on_back_button_gui_input)
 
 
 # Nueva función auxiliar para obtener la tecla
@@ -162,8 +169,8 @@ func setup_control_buttons() -> void:
 
 
 func setup_back_button_display() -> void:
-	var back_button_node = back_button_container.get_child(0) # Asumiendo que el botón es el primer hijo
-
+	# back_button_node ya está referenciado
+	
 	# Configuramos el Botón de Regreso
 	if back_button_node.has_method("set_text"):
 		back_button_node.set_text("BACK")
@@ -175,9 +182,10 @@ func setup_back_button_display() -> void:
 	if back_button_node.has_method("set_background_color"):
 		back_button_node.set_background_color(Color("#6A5ACD")) # Azul purpúreo
 
+
 # --- 🔹 Nueva función para configurar los selectores de P1 y P2 ---
 func setup_selectors() -> void:
-	var back_button_node = back_button_container.get_child(0) # Referencia al botón
+	# back_button_node ya está referenciado
 
 	# 1. Selector P1 (Siempre se agrega)
 	add_selector_to_back_button(Player.ControlScheme.P1, back_button_node.position)
@@ -193,9 +201,8 @@ func add_selector_to_back_button(control_scheme: Player.ControlScheme, position:
 	selector.control_scheme = control_scheme
 	
 	# 2. Llamar EXPLICITAMENTE a update_indicators() para forzar la visibilidad de P1/P2
-	# Esto es CRÍTICO si el selector no tiene un setget
 	if selector.has_method("update_indicators"):
-		selector.update_indicators() 
+		selector.update_indicators()
 		
 	selectors.append(selector)
 	back_button_container.add_child(selector)
@@ -203,9 +210,26 @@ func add_selector_to_back_button(control_scheme: Player.ControlScheme, position:
 	# 3. Posicionar el selector sobre el botón
 	selector.position = position
 
+# --- 🎯 MANEJADOR DE CLIC DEL RATÓN/TOQUE ---
+func _on_back_button_gui_input(event: InputEvent) -> void:
+	# Chequeamos si el evento es el clic izquierdo del ratón (que incluye toque de pantalla)
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
+		
+		# Ejecutar la acción de regreso
+		handle_back_action()
+		
+		# Marcar el evento como manejado
+		get_viewport().set_input_as_handled()
+
+# --- 🎯 LÓGICA DE REGRESO ---
+func handle_back_action() -> void:
+	SoundPlayer.play(SoundPlayer.Sound.UI_SELECT)
+	# Regresa a la pantalla de selección de opciones
+	transition_screen(SoccerGame.ScreenType.OPTIONS_SELECTION)
+
 # --- Control de Entrada Simplificado para solo el botón de regreso ---
 func _process(_delta: float) -> void:
-	var back_button_node = back_button_container.get_child(0) # El botón real
+	# Obtenemos la posición del botón
 	var back_button_pos = back_button_node.position
 	
 	var confirmed = false
@@ -215,6 +239,7 @@ func _process(_delta: float) -> void:
 		var scheme = selector.control_scheme
 		
 		# Navegación y Confirmación (solo hay 1 botón, así que solo confirmamos/cancelamos)
+		# 💡 Aquí se maneja la entrada de teclado/mando
 		if KeyUtils.is_action_just_pressed(scheme, KeyUtils.Action.SHOOT) or KeyUtils.is_action_just_pressed(scheme, KeyUtils.Action.PASS):
 			confirmed = true
 		
@@ -222,9 +247,9 @@ func _process(_delta: float) -> void:
 		selector.position = back_button_pos
 	
 	if confirmed:
-		SoundPlayer.play(SoundPlayer.Sound.UI_SELECT)
-		transition_screen(SoccerGame.ScreenType.OPTIONS_SELECTION)
+		# Lógica de confirmación por teclado/mando
+		handle_back_action() 
 		
 func _input(_event: InputEvent) -> void:
-	# La lógica principal de regreso se maneja en _process
+	# El input de ratón/toque está manejado por la conexión gui_input del nodo Control
 	pass

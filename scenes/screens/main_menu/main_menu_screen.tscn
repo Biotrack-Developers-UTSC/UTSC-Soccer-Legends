@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://i5jl45wd163d"]
+[gd_scene load_steps=20 format=3 uid="uid://i5jl45wd163d"]
 
 [ext_resource type="Script" uid="uid://i0r8ca0yct70" path="res://scenes/screens/main_menu/main_menu_screen.gd" id="1_ai35v"]
 [ext_resource type="Texture2D" uid="uid://d3xmswxt2sphp" path="res://assets/art/ui/mainmenu/menu-background.png" id="1_vkt5c"]
@@ -10,6 +10,15 @@
 [ext_resource type="Texture2D" uid="uid://dg48g6iigpgo4" path="res://assets/art/ui/mainmenu/2-players.png" id="7_3kkw7"]
 [ext_resource type="Texture2D" uid="uid://bwdt32vekrunp" path="res://assets/art/ui/mainmenu/ball-selection.png" id="8_du1io"]
 [ext_resource type="PackedScene" uid="uid://ch0c8fii5d7tg" path="res://scenes/screens/quiz/boton_bracket_flag.tscn" id="10_nawi7"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_nawi7"]
+size = Vector2(142, 21)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1h8ap"]
+size = Vector2(142, 21)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_u4ap7"]
+size = Vector2(50, 32)
 
 [sub_resource type="Animation" id="Animation_1h8ap"]
 length = 0.001
@@ -28,7 +37,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("Background/SinglePlayerTexture:position")
+tracks/1/path = NodePath("Background/SinglePlayerArea2D/SinglePlayerTexture:position")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -40,7 +49,7 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("Background/TwoPlayerTexture:position")
+tracks/2/path = NodePath("Background/TwoPlayerArea2D/TwoPlayerTexture:position")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -100,7 +109,7 @@ tracks/6/keys = {
 tracks/7/type = "value"
 tracks/7/imported = false
 tracks/7/enabled = true
-tracks/7/path = NodePath("Background/BotonBracketFlag:modulate")
+tracks/7/path = NodePath("Background/BotonBracketFlagArea2D/BotonBracketFlag:modulate")
 tracks/7/interp = 1
 tracks/7/loop_wrap = true
 tracks/7/keys = {
@@ -129,7 +138,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("Background/SinglePlayerTexture:position")
+tracks/1/path = NodePath("Background/SinglePlayerArea2D/SinglePlayerTexture:position")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -141,7 +150,7 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("Background/TwoPlayerTexture:position")
+tracks/2/path = NodePath("Background/TwoPlayerArea2D/TwoPlayerTexture:position")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -215,7 +224,7 @@ tracks/7/keys = {
 tracks/8/type = "value"
 tracks/8/imported = false
 tracks/8/enabled = true
-tracks/8/path = NodePath("Background/BotonBracketFlag:modulate")
+tracks/8/path = NodePath("Background/BotonBracketFlagArea2D/BotonBracketFlag:modulate")
 tracks/8/interp = 1
 tracks/8/loop_wrap = true
 tracks/8/keys = {
@@ -331,9 +340,11 @@ grow_vertical = 0
 texture = ExtResource("6_ai35v")
 expand_mode = 1
 
-[node name="SinglePlayerTexture" type="TextureRect" parent="Background"]
+[node name="SinglePlayerArea2D" type="Area2D" parent="Background"]
 unique_name_in_owner = true
-layout_mode = 1
+
+[node name="SinglePlayerTexture" type="TextureRect" parent="Background/SinglePlayerArea2D"]
+unique_name_in_owner = true
 offset_left = 35.0
 offset_top = 100.0
 offset_right = 177.0
@@ -341,15 +352,47 @@ offset_bottom = 121.0
 texture = ExtResource("6_fa0uo")
 stretch_mode = 2
 
-[node name="TwoPlayerTexture" type="TextureRect" parent="Background"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Background/SinglePlayerArea2D"]
+position = Vector2(105, 110)
+shape = SubResource("RectangleShape2D_nawi7")
+
+[node name="TwoPlayerArea2D" type="Area2D" parent="Background"]
 unique_name_in_owner = true
-layout_mode = 1
+
+[node name="TwoPlayerTexture" type="TextureRect" parent="Background/TwoPlayerArea2D"]
+unique_name_in_owner = true
 offset_left = 30.0
 offset_top = 125.0
 offset_right = 172.0
 offset_bottom = 146.0
 texture = ExtResource("7_3kkw7")
 stretch_mode = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Background/TwoPlayerArea2D"]
+position = Vector2(100, 135)
+shape = SubResource("RectangleShape2D_1h8ap")
+
+[node name="BotonBracketFlagArea2D" type="Area2D" parent="Background"]
+unique_name_in_owner = true
+
+[node name="BotonBracketFlag" parent="Background/BotonBracketFlagArea2D" instance=ExtResource("10_nawi7")]
+unique_name_in_owner = true
+modulate = Color(1, 1, 1, 0)
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = 60.0
+offset_top = 148.0
+offset_right = 110.0
+offset_bottom = 180.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Background/BotonBracketFlagArea2D"]
+position = Vector2(85, 165)
+shape = SubResource("RectangleShape2D_u4ap7")
 
 [node name="SelectionIcon" type="TextureRect" parent="Background"]
 unique_name_in_owner = true
@@ -362,22 +405,6 @@ pivot_offset = Vector2(10, 10)
 texture = ExtResource("8_du1io")
 stretch_mode = 2
 
-[node name="BotonBracketFlag" parent="Background" instance=ExtResource("10_nawi7")]
-unique_name_in_owner = true
-modulate = Color(1, 1, 1, 0)
-layout_mode = 1
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -80.0
-offset_top = -32.0
-offset_right = -30.0
-offset_bottom = 0.0
-grow_horizontal = 2
-grow_vertical = 0
-
 [node name="MenuAnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
 &"": SubResource("AnimationLibrary_u4ap7")
@@ -389,3 +416,7 @@ libraries = {
 &"": SubResource("AnimationLibrary_nawi7")
 }
 autoplay = "rotate"
+
+[connection signal="input_event" from="Background/SinglePlayerArea2D" to="." method="_on_single_player_area_2d_input_event"]
+[connection signal="input_event" from="Background/TwoPlayerArea2D" to="." method="_on_two_player_area_2d_input_event"]
+[connection signal="input_event" from="Background/BotonBracketFlagArea2D" to="." method="_on_two_player_area_2d_input_event"]

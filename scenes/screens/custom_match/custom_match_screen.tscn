@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://dv0wjw5vxamwl"]
+[gd_scene load_steps=9 format=3 uid="uid://dv0wjw5vxamwl"]
 
 [ext_resource type="Texture2D" uid="uid://j7vsdwyw1ftu" path="res://assets/art/ui/teamselection/tournament-screen.png" id="1_5440e"]
 [ext_resource type="Script" uid="uid://bpwttpft7meyy" path="res://scenes/screens/custom_match/custom_match_screen.gd" id="1_n8dbn"]
@@ -7,6 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://c5865flwdrp6o" path="res://assets/art/ui/flags/flag-vseparator.png" id="4_dadku"]
 [ext_resource type="Texture2D" uid="uid://8scffcprv70y" path="res://assets/art/ui/teamselection/finals-label.png" id="5_3w5a5"]
 [ext_resource type="Texture2D" uid="uid://0cis87e8p4f" path="res://assets/art/ui/teamselection/worldcup-label.png" id="6_dadku"]
+[ext_resource type="PackedScene" uid="uid://bq774w068w28m" path="res://scenes/ui/mobile_controls.tscn" id="8_nral7"]
 
 [node name="CustomMatchScreen" type="Node"]
 script = ExtResource("1_n8dbn")
@@ -233,3 +234,5 @@ offset_right = 33.0
 offset_bottom = -15.0
 grow_horizontal = 2
 grow_vertical = 0
+
+[node name="MobileControls" parent="background" instance=ExtResource("8_nral7")]

@@ -12,7 +12,6 @@ size = Vector2(50, 32)
 script = ExtResource("1_48481")
 
 [node name="Background" type="TextureRect" parent="."]
-unique_name_in_owner = true
 offset_right = 40.0
 offset_bottom = 40.0
 texture = ExtResource("1_a801y")
@@ -30,20 +29,10 @@ grow_horizontal = 2
 texture = ExtResource("2_wx5lj")
 expand_mode = 1
 
-[node name="OptionsContainer" type="Control" parent="Background"]
-unique_name_in_owner = true
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-
 [node name="BotonBracketFlagArea2D" type="Area2D" parent="Background"]
 unique_name_in_owner = true
 
 [node name="BotonBracketFlag" parent="Background/BotonBracketFlagArea2D" instance=ExtResource("4_t2ae1")]
-unique_name_in_owner = true
 offset_left = 65.0
 offset_top = 75.0
 offset_right = 115.0
@@ -57,7 +46,6 @@ shape = SubResource("RectangleShape2D_48481")
 unique_name_in_owner = true
 
 [node name="BotonBracketFlag2" parent="Background/BotonBracketFlag2Area2D" instance=ExtResource("4_t2ae1")]
-unique_name_in_owner = true
 offset_left = 150.0
 offset_top = 75.0
 offset_right = 200.0
@@ -71,7 +59,6 @@ shape = SubResource("RectangleShape2D_48481")
 unique_name_in_owner = true
 
 [node name="BotonBracketFlag3" parent="Background/BotonBracketFlag3Area2D" instance=ExtResource("4_t2ae1")]
-unique_name_in_owner = true
 offset_left = 65.0
 offset_top = 120.0
 offset_right = 115.0
@@ -85,7 +72,6 @@ shape = SubResource("RectangleShape2D_48481")
 unique_name_in_owner = true
 
 [node name="BotonBracketFlag4" parent="Background/BotonBracketFlag4Area2D" instance=ExtResource("4_t2ae1")]
-unique_name_in_owner = true
 offset_left = 150.0
 offset_top = 120.0
 offset_right = 200.0

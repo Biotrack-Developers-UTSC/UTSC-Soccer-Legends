@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://d2o5ke8hnumnd"]
+[gd_scene load_steps=11 format=3 uid="uid://d2o5ke8hnumnd"]
 
 [ext_resource type="Script" uid="uid://dbv2aobqoqmm6" path="res://scenes/screens/quiz/soccer_quiz_screen.gd" id="1_75uy0"]
 [ext_resource type="Texture2D" uid="uid://6n0aa1jkfcuf" path="res://assets/art/backgrounds/quiz_background.png" id="1_xnmon"]
@@ -9,6 +9,7 @@
 [ext_resource type="PackedScene" uid="uid://bx4v5gvm752ys" path="res://scenes/characters/player.tscn" id="4_xomlc"]
 [ext_resource type="PackedScene" uid="uid://u1meyud4oeaw" path="res://scenes/ball/ball.tscn" id="5_pvq04"]
 [ext_resource type="PackedScene" uid="uid://b8gvy2oqepqox" path="res://scenes/screens/quiz/seleccion_botones_bracket_flag.tscn" id="6_ocqej"]
+[ext_resource type="PackedScene" uid="uid://bq774w068w28m" path="res://scenes/ui/mobile_controls.tscn" id="10_pvq04"]
 
 [node name="SoccerQuizScreen" type="Node"]
 script = ExtResource("1_75uy0")
@@ -508,5 +509,7 @@ layout_mode = 2
 texture = ExtResource("4_pvq04")
 expand_mode = 1
 stretch_mode = 5
+
+[node name="MobileControls" parent="." instance=ExtResource("10_pvq04")]
 
 [editable path="SeleccionBotonesBracketFlag"]

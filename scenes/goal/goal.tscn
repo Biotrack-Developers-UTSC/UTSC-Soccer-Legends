@@ -11,7 +11,7 @@ size = Vector2(26, 2)
 size = Vector2(26, 2)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_0jila"]
-size = Vector2(10, 60)
+size = Vector2(9, 63)
 
 [node name="Goal" type="Node2D"]
 y_sort_enabled = true
@@ -68,7 +68,7 @@ collision_layer = 8
 collision_mask = 0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="InvisibleWalls"]
-position = Vector2(14, -34)
+position = Vector2(19.5, -33.5)
 shape = SubResource("RectangleShape2D_0jila")
 
 [node name="ScoringArea" type="Area2D" parent="."]
@@ -77,5 +77,5 @@ collision_layer = 16
 collision_mask = 4
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="ScoringArea"]
-position = Vector2(9, -34)
+position = Vector2(8, -34)
 shape = SubResource("RectangleShape2D_0jila")

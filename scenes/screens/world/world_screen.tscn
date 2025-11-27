@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://dr5gbk7pmnoj4"]
+[gd_scene load_steps=15 format=3 uid="uid://dr5gbk7pmnoj4"]
 
 [ext_resource type="Script" uid="uid://kh5qw1ejmjlb" path="res://scenes/screens/world/camera.gd" id="1_a8rjt"]
 [ext_resource type="Script" uid="uid://y0d648yl5nuw" path="res://scenes/screens/world/world_screen.gd" id="1_yvi4u"]
@@ -12,6 +12,7 @@
 [ext_resource type="Texture2D" uid="uid://kq5jbf5vlq3o" path="res://assets/art/backgrounds/side-wall.png" id="9_cwmqy"]
 [ext_resource type="PackedScene" uid="uid://u1meyud4oeaw" path="res://scenes/ball/ball.tscn" id="10_8m3kx"]
 [ext_resource type="PackedScene" uid="uid://ckpx8t8wlysxy" path="res://scenes/ui/ui.tscn" id="11_rs40n"]
+[ext_resource type="PackedScene" uid="uid://bq774w068w28m" path="res://scenes/ui/mobile_controls.tscn" id="13_wfsse"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_7r4gi"]
 size = Vector2(802, 7)
@@ -151,3 +152,5 @@ position = Vector2(425, 180)
 
 [node name="GameOverTimer" type="Timer" parent="."]
 unique_name_in_owner = true
+
+[node name="MobileControls" parent="." instance=ExtResource("13_wfsse")]

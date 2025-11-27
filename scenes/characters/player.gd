@@ -53,6 +53,8 @@ var state_factory := PlayerStateFactory.new()
 var weight_on_duty_steering := 0.0
 # --- NUEVA VARIABLE ---
 var is_dummy : bool = false
+# --- VARIABLE AÑADIDA PARA CONTROL TÁCTIL ---
+var mobile_movement_vector: Vector2 = Vector2.ZERO
 # ----------------------
 
 func _ready() -> void:
@@ -60,8 +62,8 @@ func _ready() -> void:
 	if is_dummy:
 		# Si es dummy, solo configuramos lo visual (colores) y salimos.
 		set_shader_properties()
-		control_sprite.visible = false 
-		return 
+		control_sprite.visible = false
+		return
 	# ----------------------------------
 
 	set_control_texture()
@@ -81,6 +83,25 @@ func _ready() -> void:
 			initial_position = kickoff_position
 	
 	switch_state(State.RESETTING, PlayerStateData.build().set_reset_position(initial_position))
+	
+	# --- NUEVA CONEXIÓN DE CONTROLES TÁCTILES ---
+	_connect_mobile_controls()
+
+func _connect_mobile_controls() -> void:
+	# Busca el nodo MobileControls en el árbol de la escena. 
+	# (AJUSTA ESTA RUTA si es necesario)
+	var mobile_controls = get_node_or_null("/root/Main/MobileControls") 
+	
+	if mobile_controls and mobile_controls is MobileControls:
+		# Conecta la señal 'movement_vector_changed' del MobileControls
+		if not mobile_controls.movement_vector_changed.is_connected(_on_mobile_movement_vector_changed):
+			mobile_controls.movement_vector_changed.connect(_on_mobile_movement_vector_changed)
+	else:
+		print("ADVERTENCIA: No se encontró el nodo MobileControls. El jugador solo usará teclado/IA.")
+
+func _on_mobile_movement_vector_changed(direction_vector: Vector2) -> void:
+	# Esta función actualiza el vector de movimiento táctil.
+	mobile_movement_vector = direction_vector
 
 func _process(delta: float) -> void:
 	# --- CAMBIO IMPORTANTE ---
@@ -97,7 +118,7 @@ func _process(delta: float) -> void:
 func set_shader_properties() -> void:
 	player_sprite.material.set_shader_parameter("skin_color", skin_color)
 	var countries := DataLoader.get_countries()
-	if countries.is_empty(): return 
+	if countries.is_empty(): return
 	
 	var country_color := countries.find(country)
 	if country_color == -1: country_color = 0

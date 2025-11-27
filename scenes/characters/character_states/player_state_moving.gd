@@ -9,8 +9,6 @@ func _process(_delta: float) -> void:
 	# 2. CASO CPU DUMMY (Se queda quieto)
 	elif player.control_scheme == Player.ControlScheme.CPU and player.is_dummy:
 		player.velocity = Vector2.ZERO # Forzamos velocidad cero
-		# IMPORTANTE: No llamamos a handle_human_movement() aquí
-		# porque el CPU no tiene teclas asignadas y causaría el crash.
 
 	# 3. CASO HUMANO (P1 o P2)
 	else:
@@ -21,10 +19,23 @@ func _process(_delta: float) -> void:
 	player.set_heading()
 
 func handle_human_movement() -> void:
-	var direction := KeyUtils.get_input_vector(player.control_scheme)
+	var direction := Vector2.ZERO
+	
+	# --- LÓGICA DE MOVIMIENTO DE 8 DIRECCIONES (TÁCTIL VS TECLADO) ---
+	# 1. Intentar usar el vector de movimiento táctil (proveniente de MobileControls)
+	if player.mobile_movement_vector != Vector2.ZERO:
+		direction = player.mobile_movement_vector
+	# 2. Si el vector táctil es cero (nadie toca la pantalla), usar la entrada de teclado
+	else:
+		direction = KeyUtils.get_input_vector(player.control_scheme)
+	
 	player.velocity = direction * player.speed
+	
 	if player.velocity != Vector2.ZERO:
 		teammate_detection_area.rotation = player.velocity.angle()
+
+	# --- LÓGICA DE ACCIONES (SHOOT/PASS) ---
+	# Las acciones siguen usando KeyUtils para detectar si los botones A/B están siendo presionados.
 
 	if KeyUtils.is_action_just_pressed(player.control_scheme, KeyUtils.Action.PASS):
 		if player.has_ball():

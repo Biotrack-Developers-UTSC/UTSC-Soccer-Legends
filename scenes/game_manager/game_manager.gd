@@ -1,7 +1,7 @@
 extends Node
 
 const DURATION_IMPACT_PAUSE := 100
-const DURATION_GAME_SEC := 2 #* 60
+const DURATION_GAME_SEC := 2 * 60
 
 enum State {IN_PLAY, SCORED, RESET, KICKOFF, OVERTIME, GAMEOVER}
 
@@ -12,6 +12,8 @@ var score : Array[int] = [0, 0]
 var state_factory := GameStateFactory.new()
 var time_left : float
 var time_since_paused := Time.get_ticks_msec()
+# En la clase GameManager
+var is_p2_cpu := false # Nueva variable
 
 func _init() -> void:
 	process_mode = ProcessMode.PROCESS_MODE_ALWAYS
@@ -40,8 +42,9 @@ func is_coop() -> bool:
 	return player_setup[0] == player_setup[1]
 
 func is_single_player() -> bool:
-	return player_setup[1].is_empty()
-
+	# Un solo jugador es cuando NO es COOP y el oponente es CPU
+	return not is_coop() and is_p2_cpu
+	
 func is_time_up() -> bool:
 	return time_left <= 0
 

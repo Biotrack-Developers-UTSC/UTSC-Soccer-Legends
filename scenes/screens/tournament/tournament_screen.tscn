@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://d4jilpwcjmmab"]
+[gd_scene load_steps=9 format=3 uid="uid://d4jilpwcjmmab"]
 
 [ext_resource type="Script" uid="uid://d13g27k1sfhvd" path="res://scenes/screens/tournament/tournament_screen.gd" id="1_hvkgv"]
 [ext_resource type="Texture2D" uid="uid://j7vsdwyw1ftu" path="res://assets/art/ui/teamselection/tournament-screen.png" id="2_m0rxb"]
@@ -7,6 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://didpfnlwqxyv2" path="res://assets/art/ui/flags/flag-hseparator.png" id="5_ru4pj"]
 [ext_resource type="Texture2D" uid="uid://0cis87e8p4f" path="res://assets/art/ui/teamselection/worldcup-label.png" id="6_7eqbv"]
 [ext_resource type="Texture2D" uid="uid://cfq6vdxbdo4or" path="res://assets/art/ui/teamselection/quarters-label.png" id="7_702pu"]
+[ext_resource type="PackedScene" uid="uid://bq774w068w28m" path="res://scenes/ui/mobile_controls.tscn" id="8_v5v2t"]
 
 [node name="TournamentScreen" type="Node"]
 script = ExtResource("1_hvkgv")
@@ -233,5 +234,7 @@ offset_right = 33.0
 offset_bottom = -15.0
 grow_horizontal = 2
 grow_vertical = 0
+
+[node name="MobileControls" parent="." instance=ExtResource("8_v5v2t")]
 
 [editable path="background/WinnerContainer/BracketFlag"]
